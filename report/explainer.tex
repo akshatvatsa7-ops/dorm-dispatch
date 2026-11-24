@@ -257,19 +257,30 @@ The second is worth about \NUrgentImpossible{} rescued complaints a month.
 
 \subsection{Other things we learned}
 \begin{itemize}
-\item \textbf{Do not hire.} Six technicians collapses (objective
-  \NCrewSixObj{} against \NCrewNineObj{} for nine). Nine is enough. Twelve
-  improves it only to \NCrewTwelveObj{}, which buys almost nothing.
+\item \textbf{Do not hire \emph{at this complaint rate}.} Six technicians
+  collapses (\NCrewSixObj{} against \NCrewNineObj{} for nine). Nine is
+  enough, twelve improves it only to \NCrewTwelveObj{} and fifteen not at
+  all (\NCrewFifteenObj). But crew size and complaint rate have to be
+  answered together: nine people are overwhelmed at \num{85} complaints a
+  day, where twelve cope easily, and fifteen are needed at \num{110}. The
+  rule of thumb is \textbf{one technician per six complaints a day}, evenly
+  split across the trades. Hiring late compounds \textemdash{} at
+  \num{110} a day the nine-person crew scores
+  \NGridOneHundredTenxThreeObj{} against fifteen's
+  \NGridOneHundredTenxFiveObj.
 \item \textbf{Do not rebalance the trades to match average workload.} This
   one went against our own guess. Moving to four electricians, four plumbers
   and one carpenter -- the same nine people, allocated to match average
   demand -- gives \NCrewRebalObj{}, far worse than \NCrewNineObj{}. The quiet
   trade is quiet \emph{on average} and not on a bad day, and a single
   carpenter who falls behind never catches up.
-\item \textbf{It holds up under pressure.} At a surge of 85 complaints a day,
-  the baseline collapses to \NSurgeHighFifoSla\% on time with a backlog of
-  \NSurgeHighFifoBacklog{}, while the optimised plan holds \NSurgeHighImpSla\%
-  with a backlog of \NSurgeHighImpBacklog{}.
+\item \textbf{It holds up under pressure, to a point.} Sweeping the arrival
+  rate from \NLoadMin{} to \NLoadMax{} a day, the optimised plan stays flat
+  (\NLoadFortySla\% on time at \NLoadMin, \NLoadSeventySla\% at
+  \num{70}) and only then gives way: \NLoadEightyFiveSla\% at \num{85}
+  and \NLoadHundredSla\% at \NLoadMax. The baseline is already losing
+  ground at \NLoadMin{} and reaches \NLoadHundredFifoSla\% at \NLoadMax.
+  The knee is sharp, and past it the answer is staffing, not scheduling.
 \item \textbf{It is not a fluke of one random seed.} Across \NSeedCount{}
   independent ticket streams the optimised objective ranges
   \NSeedImpMin--\NSeedImpMax{} and the baseline \NSeedFifoMin--\NSeedFifoMax{}.

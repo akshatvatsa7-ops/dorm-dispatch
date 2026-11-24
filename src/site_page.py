@@ -13,6 +13,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from instance import TICKETS_PER_DAY
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, "..")
 FIGS = os.path.join(ROOT, "out", "figures")
@@ -284,7 +286,7 @@ the promise rather than with the plan.</p></div>
 <li>Bundle by campus, and remember each trade has its own far side. The
   electricians should be batching new-campus work and the plumbers and
   carpenters main-campus work, crossing in opposite directions.</li>
-<li>Do not hire. Nine technicians is enough for this load.</li>
+<li>Do not hire <em>at this complaint rate</em>. Nine technicians is enough for {TICKETS_PER_DAY} complaints a day and the fifteenth is invisible — but nine are overwhelmed at 85 a day and you would need twelve, or fifteen at 110. Budget about one technician per six complaints a day.</li>
 <li>Do not rebalance the trades to match average workload. The quiet trade is
   quiet on average, not on a bad day.</li>
 <li>Change the promise or change the access for complaints that can only be

@@ -506,17 +506,35 @@ the crew can actually reach in time.
 
 \section{What happens when it gets busy}
 
-Thirty ordinary days is a soft test. The start of a term and the first week of
-the monsoon both produce far more complaints than usual, so we repeated the
-comparison with the arrival rate pushed from \NTicketsPerDay{} to
-\num{85} complaints a day, which is about as much repair work as nine people
-can physically absorb.
+Thirty ordinary days is a soft test. The start of a term and the first week
+of the monsoon both produce far more complaints than usual, and the Estate
+Office has no control over how many arrive. So rather than pick one surge
+figure we swept the arrival rate from \NLoadMin{} to \NLoadMax{} complaints
+a day and ran the whole month at each, for both the baseline and the
+optimised plan.
 
 \begin{table}[h]\centering\small
 \input{tables/surge.tex}
-\caption{The same crew under normal load and under a surge.}
+\caption{The same nine technicians at six different complaint rates.}
 \label{tab:surge}
 \end{table}
+
+Table~\ref{tab:surge} shows two quite different shapes. The baseline degrades
+from the very first step: it is already losing ground at \NLoadMin{} a day
+(\NLoadFortyFifoSla\% on time) and it does not so much decline as fall over,
+reaching \NLoadHundredFifoSla\% at \NLoadMax. The optimised plan is flat
+across the range the Estate Office actually sees: \NLoadFortySla\% at
+\NLoadMin{} a day, \NLoadFiftyEightSla\% at the base rate of
+\NTicketsPerDay, and still \NLoadSeventySla\% at \num{70}. Its queue only
+starts to build past that, and the knee is sharp: average waiting work goes
+\NLoadFiftyEightBacklog{} at \NTicketsPerDay{} a day,
+\NLoadSeventyBacklog{} at \num{70}, \NLoadEightyFiveBacklog{} at \num{85}
+and \NLoadHundredBacklog{} at \NLoadMax.
+
+That knee is the useful number. Nine technicians have enough slack to absorb
+an ordinary bad week, and no amount of clever scheduling will absorb a
+permanent rise to \num{85} a day. At that point the problem has stopped being
+a routing problem and become a staffing one, which is the next section.
 
 Under the surge the baseline collapses. Its backlog grows to an average of
 \NSurgeHighFifoBacklog{} complaints, it ends the month with work still
@@ -546,8 +564,12 @@ question the Estate Office would actually care about.
 Six technicians is not enough: the backlog runs away and urgent compliance
 falls to \NCrewSixUrgent\%. Nine is enough. Going from nine to twelve is
 almost pure waste, moving overall compliance from \NCrewNineSla\% to
-\NCrewTwelveSla\% and urgent compliance not at all. Our recommendation would be
-not to hire.
+\NCrewTwelveSla\% and urgent compliance not at all, and the fifteenth
+technician is not merely wasteful but invisible: five of each trade scores
+\NCrewFifteenObj{} against twelve's \NCrewTwelveObj, a difference smaller
+than the noise between two random streams. Past twelve the extra people
+simply have nothing to do. At today's complaint rate, our recommendation
+would be not to hire.
 
 The fourth row was a surprise, and we have left it in because being wrong in
 public is more useful than quietly deleting the experiment. Looking at the
@@ -560,6 +582,41 @@ carpenter, carpentry becomes a bottleneck, and a single carpenter who falls
 behind never catches up, because the backlog he carries makes the next day
 worse. The idle time in the three-carpenter crew is not waste. It is the
 buffer that absorbs a bad day, and removing it costs far more than it saves.
+
+\subsection{How many you need depends on how many complaints arrive}
+
+``Do not hire'' is the right answer at \NTicketsPerDay{} complaints a day and
+the wrong answer at \num{110}, so the two questions cannot be settled
+separately. Table~\ref{tab:grid} crosses the three crew sizes with three
+complaint rates.
+
+\begin{table}[h]\centering\small
+\input{tables/grid.tex}
+\caption{Crew size against complaint rate, all running the best method. The
+objective column is what matters: it rises by a factor of a hundred when a
+crew is past its capacity, because the backlog compounds.}
+\label{tab:grid}
+\end{table}
+
+The pattern is clean, and it is a capacity threshold rather than a gradual
+trade-off. At each rate there is a crew size that copes and a crew size that
+does not, with very little in between. Nine technicians handle
+\NTicketsPerDay{} a day comfortably and are overwhelmed at \num{85}, where
+the queue averages \NGridEightyFivexThreeBacklog{} complaints and the
+objective is \NGridEightyFivexThreeObj. Twelve handle \num{85} easily
+(backlog \NGridEightyFivexFourBacklog, objective
+\NGridEightyFivexFourObj) and begin to strain at \num{110}. Fifteen handle
+\num{110} (backlog \NGridOneHundredTenxFiveBacklog{} against twelve's
+\NGridOneHundredTenxFourBacklog).
+
+So the staffing rule that falls out of this is simple enough to state in one
+line: \textbf{about one technician per six complaints a day, split evenly
+across the three trades.} Nine people to \NTicketsPerDay{} a day, twelve to
+\num{85}, fifteen to \num{110}. Hiring ahead of that is money for nothing,
+and hiring behind it is expensive in a way that compounds: at \num{110} a day
+the nine-person crew scores \NGridOneHundredTenxThreeObj{} against the
+fifteen-person crew's \NGridOneHundredTenxFiveObj, a difference of nearly two
+orders of magnitude, because once a backlog starts growing it never stops.
 
 \section{Do these conclusions hold up?}
 
@@ -608,9 +665,13 @@ between methods untouched.
   main-campus work. The two trades should be crossing in opposite
   directions, and a plan where they both wander back and forth is a plan
   that has not been thought about.
-\item Do not hire more technicians. Nine is enough for the load we modelled,
-  and the twelfth person buys almost nothing. If complaint volumes rise to
-  surge levels permanently, revisit this.
+\item Do not hire more technicians \emph{at the current complaint rate}.
+  Nine is enough for \NTicketsPerDay{} a day; the twelfth person buys almost
+  nothing and the fifteenth is invisible. But this is a capacity threshold,
+  not a preference: budget roughly one technician per six complaints a day,
+  so twelve if the rate settles at \num{85} and fifteen at \num{110}.
+  Hiring late is far more expensive than hiring early, because a backlog
+  compounds.
 \item Do not rebalance the trades to match average workload. The quiet trade
   is quiet on average and not on a bad day, and cutting it to one person makes
   the whole system fragile.

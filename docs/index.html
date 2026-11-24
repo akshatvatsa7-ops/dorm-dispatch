@@ -737,7 +737,7 @@ methods.</p>
 <table><thead><tr><th>Jobs</th><th>Optimum</th><th>Savings + improve</th><th>Gap</th><th>Nodes, warm</th><th>Nodes, cold</th></tr></thead><tbody><tr><td>6</td><td>1.373</td><td>1.373</td><td>0.0%</td><td>170</td><td>176</td></tr><tr><td>7</td><td>1.373</td><td>1.373</td><td>0.0%</td><td>484</td><td>490</td></tr><tr><td>8</td><td>1.380</td><td>1.380</td><td>0.0%</td><td>1,489</td><td>1,550</td></tr><tr><td>9</td><td>1.380</td><td>1.380</td><td>0.0%</td><td>5,133</td><td>5,341</td></tr><tr><td>10</td><td>1.380</td><td>1.380</td><td>0.0%</td><td>10,131</td><td>10,700</td></tr></tbody></table>
 
 <h2>How many technicians?</h2>
-<table><thead><tr><th>Crew</th><th>People</th><th>Objective</th><th>On time</th><th>Urgent on time</th></tr></thead><tbody><tr><td>2 of each trade (6)</td><td>6</td><td>2,718</td><td>90.3%</td><td>79.6%</td></tr><tr><td>3 of each trade (9)</td><td>9</td><td>320</td><td>98.0%</td><td>86.9%</td></tr><tr><td>4 of each trade (12)</td><td>12</td><td>293</td><td>98.1%</td><td>86.9%</td></tr><tr><td>4 electrical / 4 plumbing / 1 carpentry (9)</td><td>9</td><td>2,356</td><td>93.4%</td><td>85.3%</td></tr></tbody></table>
+<table><thead><tr><th>Crew</th><th>People</th><th>Objective</th><th>On time</th><th>Urgent on time</th></tr></thead><tbody><tr><td>2 of each trade (6)</td><td>6</td><td>2,718</td><td>90.3%</td><td>79.6%</td></tr><tr><td>3 of each trade (9)</td><td>9</td><td>320</td><td>98.0%</td><td>86.9%</td></tr><tr><td>4 of each trade (12)</td><td>12</td><td>293</td><td>98.1%</td><td>86.9%</td></tr><tr><td>5 of each trade (15)</td><td>15</td><td>293</td><td>98.1%</td><td>86.9%</td></tr><tr><td>4 electrical / 4 plumbing / 1 carpentry (9)</td><td>9</td><td>2,356</td><td>93.4%</td><td>85.3%</td></tr></tbody></table>
 <p>Six is not enough and the backlog runs away. Nine is enough. Twelve buys
 almost nothing. The last row was a surprise we kept in: carpentry looks like
 the idle trade, so we tried moving a carpenter's post to the busier trades at
@@ -766,7 +766,7 @@ the promise rather than with the plan.</p></div>
 <li>Bundle by campus, and remember each trade has its own far side. The
   electricians should be batching new-campus work and the plumbers and
   carpenters main-campus work, crossing in opposite directions.</li>
-<li>Do not hire. Nine technicians is enough for this load.</li>
+<li>Do not hire <em>at this complaint rate</em>. Nine technicians is enough for 58 complaints a day and the fifteenth is invisible — but nine are overwhelmed at 85 a day and you would need twelve, or fifteen at 110. Budget about one technician per six complaints a day.</li>
 <li>Do not rebalance the trades to match average workload. The quiet trade is
   quiet on average, not on a bad day.</li>
 <li>Change the promise or change the access for complaints that can only be
@@ -788,7 +788,7 @@ can put them in and rerun.</p>
 <footer>
 Built for the Operations Management &amp; Logistics group project.
 Campus geometry from OpenStreetMap, &copy; OpenStreetMap contributors, ODbL.
-Complaint data is synthetic. Study runtime 43.4 s.
+Complaint data is synthetic. Study runtime 138.3 s.
 </footer>
 
 </div></body></html>

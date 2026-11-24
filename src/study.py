@@ -33,6 +33,15 @@ DAYS = 30
 BASE_SEED = 2026
 SEEDS = [2026, 7, 101, 555, 9001]
 
+# Complaint rates to sweep, in complaints per day. 58 is the base case; the
+# rest run from a quiet spell up to roughly double the normal load.
+LOADS = [40, 50, 58, 70, 85, 100]
+
+# The crew-against-load grid. Three crew sizes at three rates is enough to
+# show where each crew stops coping without running the whole cross product.
+GRID_LOADS = [58, 85, 110]
+GRID_CREWS = [3, 4, 5]
+
 METHOD_LABEL = {
     "fifo": "First come first served",
     "savings": "Clarke-Wright savings",
@@ -148,6 +157,7 @@ def main():
         ("2 of each trade (6)", {"electrical": 2, "plumbing": 2, "carpentry": 2}),
         ("3 of each trade (9)", {"electrical": 3, "plumbing": 3, "carpentry": 3}),
         ("4 of each trade (12)", {"electrical": 4, "plumbing": 4, "carpentry": 4}),
+        ("5 of each trade (15)", {"electrical": 5, "plumbing": 5, "carpentry": 5}),
         ("4 electrical / 4 plumbing / 1 carpentry (9)",
          {"electrical": 4, "plumbing": 4, "carpentry": 1}),
     ]
@@ -168,12 +178,12 @@ def main():
     # ---------------------------------------------------------------
     # 5. a busy week
     # ---------------------------------------------------------------
-    print("simulating a surge ...")
+    print("sweeping the complaint rate ...")
     surge_rows = [["complaints per day", "method", "objective",
                    "closed on time (%)", "urgent closed on time (%)",
                    "mean tickets waiting", "left unfinished"]]
     out["surge"] = {}
-    for load in (58, 85):
+    for load in LOADS:
         for m in ("fifo", "savings+improve"):
             r = experiment.simulate(m, c, days=DAYS, tickets_per_day=load,
                                     seed=BASE_SEED)
@@ -183,6 +193,30 @@ def main():
             out["surge"][f"{load}-{m}"] = {k: v for k, v in r.items()
                                            if k != "per_day"}
     write_csv("surge.csv", surge_rows)
+
+    # ---------------------------------------------------------------
+    # 5b. how many technicians do you need at each complaint rate?
+    # ---------------------------------------------------------------
+    print("crossing crew size with the complaint rate ...")
+    grid_rows = [["complaints per day", "technicians per trade", "crew",
+                  "objective", "closed on time (%)",
+                  "urgent closed on time (%)", "mean tickets waiting",
+                  "left unfinished", "walking (min/technician/day)"]]
+    out["grid"] = {}
+    for load in GRID_LOADS:
+        for per in GRID_CREWS:
+            mix = {t: per for t in ("electrical", "plumbing", "carpentry")}
+            r = experiment.simulate("savings+improve", c, days=DAYS,
+                                    crew_mix=mix, tickets_per_day=load,
+                                    seed=BASE_SEED)
+            grid_rows.append([load, per, per * 3, r["objective"],
+                              r["sla_met_pct"],
+                              r["by_priority"][1]["sla_met_pct"],
+                              r["mean_backlog"], r["unfinished_at_end"],
+                              r["travel_per_tech_day"]])
+            out["grid"][f"{load}-{per}"] = {k: v for k, v in r.items()
+                                            if k != "per_day"}
+    write_csv("crew_load_grid.csv", grid_rows)
 
     # ---------------------------------------------------------------
     # 6. do the conclusions depend on our assumptions?
@@ -287,7 +321,8 @@ def main():
         ("Method comparison", rows),
         ("Day by day", per_day_rows),
         ("Crew scenarios", crew_rows),
-        ("Surge", surge_rows),
+        ("Complaint rate sweep", surge_rows),
+        ("Crew vs complaint rate", grid_rows),
         ("Sensitivity", sens_rows),
         ("Branch and bound", bb_rows),
         ("Example day schedule", schedule_rows),
@@ -350,10 +385,13 @@ def write_tables(out, results, csvs):
                   f"{r['mean_backlog']:.1f}"]
                  for m, r in results.items()])
 
+    short_crew = {"4 electrical / 4 plumbing / 1 carpentry (9)":
+                  "4 elec / 4 plumb / 1 carp (9)"}
     latex_table("crew",
-                ["Crew", "People", "Objective", "On time", "Urgent on time",
-                 "Walk/tech/day", "Avg waiting"],
-                [[label, r["crew"], f"{r['objective']:,.0f}",
+                ["Crew", "People", "Objective", "On time", "Urgent",
+                 "Walk/tech/day", "Queue"],
+                [[short_crew.get(label, label), r["crew"],
+                  f"{r['objective']:,.0f}",
                   f"{r['sla_met_pct']:.1f}\\%",
                   f"{r['by_priority'][1]['sla_met_pct']:.1f}\\%",
                   f"{r['travel_per_tech_day']:.1f} min",
@@ -361,17 +399,27 @@ def write_tables(out, results, csvs):
                  for label, r in out["crew"].items()])
 
     srows = []
-    for key in ("58-fifo", "58-savings+improve", "85-fifo", "85-savings+improve"):
-        load, m = key.split("-", 1)
-        r = out["surge"][key]
-        srows.append([f"{load} a day", METHOD_LABEL[m],
-                      f"{r['sla_met_pct']:.1f}\\%",
-                      f"{r['by_priority'][1]['sla_met_pct']:.1f}\\%",
-                      f"{r['mean_backlog']:.1f}", r["unfinished_at_end"]])
+    for load in LOADS:
+        for m in ("fifo", "savings+improve"):
+            r = out["surge"][f"{load}-{m}"]
+            srows.append([load, METHOD_LABEL[m],
+                          f"{r['sla_met_pct']:.1f}\\%",
+                          f"{r['by_priority'][1]['sla_met_pct']:.1f}\\%",
+                          f"{r['mean_backlog']:.1f}", r["unfinished_at_end"]])
     latex_table("surge",
                 ["Complaints", "Method", "On time", "Urgent on time",
                  "Avg waiting", "Unfinished at the end"], srows,
                 align="llrrrr")
+
+    latex_table("grid",
+                ["Complaints/day", "Per trade", "Crew", "Objective",
+                 "On time", "Urgent on time", "Avg waiting"],
+                [[load, per, per * 3,
+                  f"{out['grid'][f'{load}-{per}']['objective']:,.0f}",
+                  f"{out['grid'][f'{load}-{per}']['sla_met_pct']:.1f}\\%",
+                  f"{out['grid'][f'{load}-{per}']['by_priority'][1]['sla_met_pct']:.1f}\\%",
+                  f"{out['grid'][f'{load}-{per}']['mean_backlog']:.1f}"]
+                 for load in GRID_LOADS for per in GRID_CREWS])
 
     latex_table("bb",
                 ["Jobs", "Done", "Optimum", "Savings", "Sav.+imp.",
@@ -490,6 +538,8 @@ def write_numbers(out, results):
             key = "CrewNine"
         elif label.startswith("4 of"):
             key = "CrewTwelve"
+        elif label.startswith("5 of"):
+            key = "CrewFifteen"
         else:
             key = "CrewRebal"
         n[key + "Obj"] = r["objective"]
@@ -503,6 +553,46 @@ def write_numbers(out, results):
         n[tag + "Sla"] = r["sla_met_pct"]
         n[tag + "Backlog"] = r["mean_backlog"]
         n[tag + "Urgent"] = r["by_priority"][1]["sla_met_pct"]
+
+    # LaTeX control sequences are letters only, so a macro cannot be called
+    # \NLoad58Sla. Numbers in macro names are spelled out instead.
+    WORD = {3: "Three", 4: "Four", 5: "Five", 40: "Forty", 50: "Fifty",
+            58: "FiftyEight", 70: "Seventy", 85: "EightyFive",
+            100: "Hundred", 110: "OneHundredTen"}
+
+    # the load sweep: where the optimised plan starts to give way
+    n["LoadMin"] = min(LOADS)
+    n["LoadMax"] = max(LOADS)
+    for load in LOADS:
+        r = out["surge"][f"{load}-savings+improve"]
+        n[f"Load{WORD[load]}Sla"] = r["sla_met_pct"]
+        n[f"Load{WORD[load]}Urgent"] = r["by_priority"][1]["sla_met_pct"]
+        n[f"Load{WORD[load]}Backlog"] = r["mean_backlog"]
+        f = out["surge"][f"{load}-fifo"]
+        n[f"Load{WORD[load]}FifoSla"] = f["sla_met_pct"]
+    coping = [l for l in LOADS
+              if out["surge"][f"{l}-savings+improve"]["mean_backlog"] < 5]
+    n["LoadLastCoping"] = max(coping) if coping else min(LOADS)
+
+    # the crew-against-load grid
+    for load in GRID_LOADS:
+        for per in GRID_CREWS:
+            r = out["grid"][f"{load}-{per}"]
+            tag = f"Grid{WORD[load]}x{WORD[per]}"
+            n[tag + "Obj"] = f"{round(r['objective']):,}"
+            n[tag + "Sla"] = r["sla_met_pct"]
+            n[tag + "Urgent"] = r["by_priority"][1]["sla_met_pct"]
+            n[tag + "Backlog"] = r["mean_backlog"]
+
+    def smallest_ok(load):
+        """Fewest technicians per trade that keeps the queue under control."""
+        for per in GRID_CREWS:
+            if out["grid"][f"{load}-{per}"]["mean_backlog"] < 5:
+                return per
+        return None
+    for load in GRID_LOADS:
+        got = smallest_ok(load)
+        n[f"Need{WORD[load]}"] = got * 3 if got else "more than 15"
 
     sd = out["seeds"]
     n["SeedCount"] = len(SEEDS)

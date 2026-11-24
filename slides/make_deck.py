@@ -509,13 +509,14 @@ def slide_surprises(prs, d):
               "question")
 
     items = [
-        ("Adding people is not the answer",
-         "Six technicians collapses. Nine is enough. Twelve buys almost "
-         "nothing — the objective only moves from "
-         f"{crew[NINE]['objective']:.0f} to "
-         f"{crew[TWELVE]['objective']:.0f}. Once the crew is "
-         "big enough to clear the day, more bodies have nothing to do.",
-         "Do not hire. Plan better."),
+        ("Adding people is not the answer — until it is",
+         "Six collapses, nine is enough, twelve buys almost nothing "
+         f"({crew[NINE]['objective']:.0f} to "
+         f"{crew[TWELVE]['objective']:.0f}) and fifteen nothing at all. But "
+         "at 85 complaints a day nine are overwhelmed and twelve cope; at "
+         "110 you need fifteen. Crew size and complaint rate have to be "
+         "answered together.",
+         "Budget one technician per six complaints a day."),
         ("Matching staff to average demand makes it worse",
          "Carpentry is the quietest trade, so four electricians, four "
          "plumbers and one carpenter looks efficient. The same nine people, "

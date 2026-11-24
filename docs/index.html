@@ -27,6 +27,9 @@ body{margin:0;background:var(--bg);color:var(--ink);
 header{padding:56px 0 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
 h1{font-size:2.1rem;line-height:1.15;margin:0 0 10px;letter-spacing:-0.02em}
 .sub{color:var(--muted);font-size:1.05rem;margin:0}
+.downloads{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:10px}
+.downloads a{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:999px;font-size:.92rem;text-decoration:none;color:var(--ink);background:var(--panel)}
+.downloads a:hover{border-color:var(--accent);color:var(--accent)}
 h2{font-size:1.3rem;margin:44px 0 10px;letter-spacing:-0.01em}
 h3{font-size:1.02rem;margin:26px 0 6px}
 p{margin:0 0 14px}
@@ -69,6 +72,11 @@ footer{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);
 <h1>Dispatching the dorm maintenance crew</h1>
 <p class="sub">An optimisation model for the IIMA Estate Office, built on the
 real campus map and run on synthetic complaint data.</p>
+<p class="downloads"><a href="report.pdf">Full report (PDF)</a>
+<a href="explainer.pdf">How it works, in 4 pages</a>
+<a href="dorm-dispatch.pptx">Slides</a>
+<a href="dispatch-model.xlsx">Results workbook</a>
+<a href="https://github.com/akshatvatsa7-ops/dorm-dispatch">Code on GitHub</a></p>
 </header>
 
 <p class="lede">The Estate Office gets maintenance complaints all day and works
@@ -780,7 +788,7 @@ can put them in and rerun.</p>
 <footer>
 Built for the Operations Management &amp; Logistics group project.
 Campus geometry from OpenStreetMap, &copy; OpenStreetMap contributors, ODbL.
-Complaint data is synthetic. Study runtime 43.2 s.
+Complaint data is synthetic. Study runtime 43.4 s.
 </footer>
 
 </div></body></html>

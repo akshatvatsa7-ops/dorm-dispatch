@@ -19,28 +19,38 @@ sys.path.insert(0, os.path.join(HERE, "src"))
 
 
 def build_report():
-    """Compile the report, twice, so cross-references settle."""
+    """
+    Compile both documents, each twice so cross-references settle.
+
+    report.tex   the full write-up
+    explainer.tex  the short plain-language companion
+
+    Both pull their figures from report/numbers.tex, which study.py has just
+    rewritten, so they cannot fall out of step with the results.
+    """
     if shutil.which("pdflatex") is None:
-        print("\npdflatex not found, skipping the report PDF.")
-        print("The numbers and tables it needs are in report/, so you can "
-              "compile it later or elsewhere.")
+        print("\npdflatex not found, skipping the PDFs.")
+        print("The numbers and tables they need are in report/, so you can "
+              "compile them later or elsewhere.")
         return False
     report_dir = os.path.join(HERE, "report")
-    for _ in range(2):
-        r = subprocess.run(
-            ["pdflatex", "-interaction=nonstopmode", "report.tex"],
-            cwd=report_dir, capture_output=True, text=True)
-    if r.returncode != 0 and not os.path.exists(
-            os.path.join(report_dir, "report.pdf")):
-        print("\npdflatex failed. Last lines of its output:")
-        print("\n".join(r.stdout.strip().splitlines()[-12:]))
-        return False
-    # tidy up the files LaTeX leaves behind
-    for ext in (".aux", ".log", ".out", ".toc"):
-        p = os.path.join(report_dir, "report" + ext)
-        if os.path.exists(p):
-            os.remove(p)
-    return True
+    ok = True
+    for name in ("report", "explainer"):
+        for _ in range(2):
+            r = subprocess.run(
+                ["pdflatex", "-interaction=nonstopmode", name + ".tex"],
+                cwd=report_dir, capture_output=True, text=True)
+        if r.returncode != 0 and not os.path.exists(
+                os.path.join(report_dir, name + ".pdf")):
+            print(f"\npdflatex failed on {name}.tex. Last lines:")
+            print("\n".join(r.stdout.strip().splitlines()[-12:]))
+            ok = False
+        # tidy up the files LaTeX leaves behind
+        for ext in (".aux", ".log", ".out", ".toc"):
+            p = os.path.join(report_dir, name + ext)
+            if os.path.exists(p):
+                os.remove(p)
+    return ok
 
 
 def main():
@@ -52,7 +62,7 @@ def main():
     print("=" * 64)
     out = study.main()
 
-    print("\nbuilding the report ...")
+    print("\nbuilding the report and the explainer ...")
     ok = build_report()
 
     print("building the web page ...")
@@ -78,6 +88,7 @@ def main():
     print("  out/dispatch-model.xlsx  the same results as a workbook")
     if ok:
         print("  report/report.pdf        the written report")
+        print("  report/explainer.pdf     the short plain explanation")
     print(f"  {os.path.relpath(page, HERE)}          the project web page")
 
 

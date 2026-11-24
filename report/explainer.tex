@@ -1,0 +1,307 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=0.72in,top=0.72in,bottom=0.78in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{charter}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\num}[1]{#1}
+\input{numbers.tex}
+
+\definecolor{ink}{HTML}{1A1A1A}
+\definecolor{accent}{HTML}{1F4E79}
+\color{ink}
+
+\titleformat{\section}{\normalfont\bfseries\sffamily\color{accent}\large}{\thesection.}{0.6em}{}
+\titlespacing{\section}{0pt}{10pt}{3pt}
+\titleformat{\subsection}{\normalfont\bfseries\sffamily\color{ink}\normalsize}{}{0em}{}
+\titlespacing{\subsection}{0pt}{7pt}{1.5pt}
+
+\setlist[itemize]{leftmargin=1.2em,itemsep=1.5pt,topsep=2pt}
+\setlength{\parskip}{2.5pt}
+\setlength{\parindent}{0pt}
+\linespread{1.0}
+
+\begin{document}
+
+\begin{center}
+{\sffamily\bfseries\Large How the dorm maintenance dispatch model works}\\[4pt]
+{\sffamily\normalsize A plain explanation of the data, the methods and the findings}\\[3pt]
+{\small Operations Management \& Logistics group project}
+\end{center}
+\vspace{4pt}
+\hrule
+\vspace{8pt}
+
+This is the companion to the main report. The report argues the case; this
+one explains the machinery. Every number quoted here comes straight from the
+code's own output, so it cannot drift from what the model does.
+
+\section{The problem, in plain words}
+
+The Estate Office gets maintenance complaints all day: a dead tubelight here,
+a dripping tap there, a window that will not shut. Each goes to a technician
+who walks to the room, does the repair, and moves on. Right now the queue is
+worked roughly in the order complaints arrive, which sounds fair but wastes a
+great deal of walking and ignores urgency completely. The question the model
+answers is narrow: \emph{given the complaints waiting at the start of a day,
+which technician should take which jobs, and in what order?}
+
+Two features of IIMA make this harder than it sounds. First, a main road cuts
+the campus in two and there is no crossing at road level, so every trip
+between the halves goes through the walkway tunnel and costs about
+\NMeanCrossCampus{} minutes against \NMeanSameCampus{} minutes for a trip
+that stays on one side. Second, the crews are not in one place. The
+electricians work out of a store room in Dorm 7 on the main campus, and the
+plumbers and carpenters share one in Dorm 24 on the new campus. The two are
+only about \num{460}~metres apart in a straight line but \num{10.6} minutes
+apart on foot. So each trade has its own far side of the campus, and the same
+job is cheap for one trade and expensive for another.
+
+\section{What is real and what is invented}
+
+This distinction matters, because it is the first thing anyone will ask.
+
+\textbf{Real:} the campus. Coordinates for all \NLocations{} locations come
+from OpenStreetMap, including the walkway tunnel, all \NTunnelMetres{} metres
+of it; \NNewCampus{} are on the new campus and \NOldCampus{} on the main
+campus. The exceptions are Dorm 7 and Dorm 24, which OpenStreetMap does not
+label individually. Those were placed from the official IIMA campus map,
+which groups the dormitories as D1--D18 on the main campus and D19--D27,
+D28--D35 and D36--D43 on the new one, each on the footprint of a real
+building in the right group.
+
+\textbf{Invented:} the complaints. Nobody was going to hand us the Estate
+Office's ticket log, so the model generates its own. The point was never to
+guess the true numbers but to put every assumption in one file where it can
+be argued with. Give it real figures in \texttt{src/instance.py} and rerun,
+and the report rewrites its own numbers.
+
+\section{Every assumption, in one place}
+
+\begin{center}\small
+\begin{tabular}{@{}llp{7.4cm}@{}}
+\toprule
+\textbf{What} & \textbf{Value} & \textbf{Why that value} \\
+\midrule
+Working day & \NWorkingMinutes{} min & 09:00--17:30 with an hour for lunch \\
+Complaints per day & \NTicketsPerDay{} & An average; the actual count each day is drawn at random \\
+Share from dorms & 85\% & Dorms have far more people in them than offices \\
+Trade mix & 45 / 35 / 20\% & Electrical / plumbing / carpentry. Lights, fans and sockets dominate \\
+Repair time & 22 / 38 / 30 min & Median per trade; plumbing takes longest \\
+Priority split & 15 / 55 / 30\% & Urgent / normal / minor \\
+Lateness weight & 10 / 4 / 1 & How badly we mind an hour late in each class \\
+Promised response & 4 h / 1 day / 3 days & The deadline per priority class \\
+Access windows & 40 / 30 / 30\% & Anytime / mornings only / afternoons only, for dorm rooms \\
+Walking speed & 75 m/min & An unhurried pace carrying a toolbag \\
+Detour factor & \num{1.30} & You walk around lawns and buildings, not through them \\
+Tunnel penalty & 2 min & Down the ramp, along, and back up \\
+Price of walking & $\alpha=\NAlpha$ & Per minute, against one weighted hour of lateness \\
+Crew & 3 per trade & Nine technicians in total \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two of these carry more weight than the rest. The \textbf{access window mix}
+turns out to decide the final result, and it is the one assumption most worth
+replacing with real data. The \textbf{price of walking} is deliberately tiny:
+walking is there to break ties, not to drive the answer. We never accept a
+later repair in order to save a walk.
+
+\section{What the model is trying to do}
+
+It minimises
+\[
+\underbrace{\sum_i w_i \times (\text{hours job } i \text{ was late})}_{\text{the thing we care about}}
+\;+\;
+\underbrace{\alpha \times (\text{total walking minutes})}_{\text{the tiebreaker}}
+\]
+subject to four rules: every job is done at most once and only by a
+technician of the matching trade; nobody starts a job before its access
+window opens or after it shuts; nobody is still working after the shift ends;
+and everyone is back at their own trade's store room by the end of the day.
+
+One subtlety is a natural question. A job that does not fit today is not
+lost: it stays in the queue and reappears tomorrow. But if deferring were
+free, the cheapest plan would be to do nothing. So whenever the model
+considers leaving a job, it charges that job the lateness it would collect if
+finished at the end of tomorrow. A minor complaint with three days left costs
+nothing to postpone, which is correct; an urgent one costs a great deal.
+
+\section{The methods, from crudest to best}
+
+Four methods were built deliberately in order, so each one exposes what the
+previous one was missing.
+
+\subsection{1. First come, first served -- the baseline}
+Take complaints in the order raised, give each to the technician of the right
+trade with the least work so far. No attention to geography or deadlines.
+This is roughly what happens today, and it is what everything else is
+measured against.
+
+\subsection{2. Clarke and Wright's savings heuristic -- fixing the walking}
+Start from the worst sensible plan: every job is its own trip out from the
+store room and straight back. Then ask what you save by doing jobs $i$ and
+$j$ on one trip instead of two:
+\[
+s_{ij} \;=\; c_{0i} + c_{0j} - c_{ij},
+\]
+where $0$ is the store room of the trade doing the work. Compute this for
+every pair, sort from biggest saving down, and work through the list merging
+routes whenever the merge is legal -- the two jobs must be on different
+routes, each still at the end of its route, and the merged route must still
+fit the shift and respect every window.
+
+Why it suits this campus is the nicest thing in the project. For an
+electrician every new-campus job has a large $c_{0i}$, being on the far side
+of the tunnel from Dorm 7, so $s_{ij}$ is large for any pair of new-campus
+jobs and the savings list is dominated by merges that bundle them into one
+crossing. For a plumber working out of Dorm 24 the main-campus jobs behave
+that way instead. Each trade batches its own far-side work, in opposite
+directions, and neither was ever told the tunnel exists: the heuristic finds
+it from the travel times alone.
+
+\subsection{3. Priority insertion -- fixing the urgency}
+Savings is blind to deadlines, so this method takes the opposite view. Insert
+jobs one at a time; at each step, for every unplaced job, work out the
+cheapest place it could slot into anyone's route, costing $\Delta$ extra
+minutes. Then pick the job with the best ratio of what you avoid by doing it
+today to what it costs to fit in. This is the ``bang per buck'' rule, and it
+behaves sensibly when there is more work than time: the urgent jobs go in
+first and the minor ones are what gets left over.
+
+\subsection{4. Savings plus improvement -- the one we recommend}
+Run savings to get sensible routes, then improve them with three moves,
+repeated until nothing gets better:
+\begin{itemize}
+\item \textbf{2-opt:} reverse a stretch of a route. On a map this removes
+  crossings -- if a route doubles back on itself, flipping the segment
+  between the crossing legs untangles it.
+\item \textbf{Or-opt within a route:} lift out a run of one to three
+  consecutive jobs and reinsert it somewhere else in the same route. Gentler
+  than 2-opt, because it leaves the order of everything else alone, which
+  matters when windows are tight.
+\item \textbf{Or-opt across routes:} move a short run of jobs from one
+  technician to another of the same trade. This is the move that matters most
+  in practice. Savings balances routes by geography but not by workload, so
+  one technician ends up with a packed day while a colleague has a free
+  afternoon; shifting a couple of jobs across fixes it.
+\end{itemize}
+Because access windows can make any of these illegal, every candidate move is
+re-checked for feasibility rather than assumed valid.
+
+\subsection{Checking the answer: branch and bound}
+A heuristic comes with no guarantee, so for small instances we find the true
+optimum and compare. The search builds a tree where each node is a partial
+route and each child adds one more job. At every node it computes a lower
+bound on the best any completion could achieve; if that bound is already
+worse than the best plan found so far, the whole branch is thrown away
+without being explored.
+
+The bound has two parts. Travel: what has been walked plus the walk back to
+the store room, valid because the times come from a shortest-path
+calculation, so going anywhere else first can only cost more. Lateness: each
+job still open is charged the cheaper of its two fates, the least lateness it
+could pick up if done today or the deferral charge if left. Both ignore
+ordering, which is why they never overstate the true cost.
+
+\textbf{The result:} savings plus improvement found the exact optimum on
+every instance up to \NBbMaxTickets{} jobs, a worst gap of \NBbGapWorst\%.
+It also defers exactly the jobs the optimum defers. Two details are worth
+quoting if asked: exploring the nearest job first cuts the search from
+\NBbNodesArbCold{} nodes to \NBbNodesCold{}, a \NBbOrderCutPct\% saving,
+while starting from the heuristic's answer saves only a further
+\NBbWarmCutPct\%. The warm start matters less than you would expect, because
+once stopping early is a legal plan the search finds a decent incumbent
+within a few nodes anyway.
+
+\section{What came out of it}
+
+Over \NDays{} simulated days, against the first-come-first-served baseline:
+
+\begin{center}\small
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+& \textbf{Baseline} & \textbf{Optimised} & \\
+\midrule
+Walking per technician per day & \NFifoTravel{} min & \NImpTravel{} min & down \NTravelCutPct\% \\
+All complaints closed on time & \NFifoSla\% & \NImpSla\% & \\
+Urgent complaints closed on time & \NFifoUrgent\% & \NImpUrgent\% & \\
+Average queue left at day's end & \NFifoBacklog{} & \NImpBacklog{} & \\
+Avoidable late urgent complaints & \NFifoUrgentAvoidable{} & \NImpUrgentAvoidable{} & in 30 days \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{The finding worth leading with}
+Of the \NUrgentTotal{} urgent complaints raised over the month,
+\NUrgentImpossible{} could never have met the four-hour promise no matter who
+was sent or in what order: the room can only be opened in the afternoon and
+the repair itself runs past the deadline. Even a technician already standing
+at the door could not have made it.
+
+Now count the misses. The optimised plan closes \NImpUrgentLate{} urgent
+complaints late, and all \NImpUrgentUnavoidable{} of them are of exactly that
+kind. \emph{The two numbers are the same number.} Every urgent complaint that
+could have been closed on time was. The scheduling has run out of room to
+improve, and what is left is a problem with the promise, not with the plan.
+Fixing it is a policy decision -- either stop making a four-hour promise on
+complaints that can only be accessed in the afternoon, or give the crew a way
+into the room without the occupant, such as a dorm staff member with a key.
+The second is worth about \NUrgentImpossible{} rescued complaints a month.
+
+\subsection{Other things we learned}
+\begin{itemize}
+\item \textbf{Do not hire.} Six technicians collapses (objective
+  \NCrewSixObj{} against \NCrewNineObj{} for nine). Nine is enough. Twelve
+  improves it only to \NCrewTwelveObj{}, which buys almost nothing.
+\item \textbf{Do not rebalance the trades to match average workload.} This
+  one went against our own guess. Moving to four electricians, four plumbers
+  and one carpenter -- the same nine people, allocated to match average
+  demand -- gives \NCrewRebalObj{}, far worse than \NCrewNineObj{}. The quiet
+  trade is quiet \emph{on average} and not on a bad day, and a single
+  carpenter who falls behind never catches up.
+\item \textbf{It holds up under pressure.} At a surge of 85 complaints a day,
+  the baseline collapses to \NSurgeHighFifoSla\% on time with a backlog of
+  \NSurgeHighFifoBacklog{}, while the optimised plan holds \NSurgeHighImpSla\%
+  with a backlog of \NSurgeHighImpBacklog{}.
+\item \textbf{It is not a fluke of one random seed.} Across \NSeedCount{}
+  independent ticket streams the optimised objective ranges
+  \NSeedImpMin--\NSeedImpMax{} and the baseline \NSeedFifoMin--\NSeedFifoMax{}.
+  The ranking never changes.
+\item \textbf{Most of the walking saving is a by-product.} Set $\alpha$ to
+  zero, telling the model not to care about walking at all, and walking rises
+  only from \NImpTravel{} to \NAlphaZeroTravel{} minutes. Planning the day
+  sensibly saves the walking almost by itself; pricing it explicitly buys the
+  last \NAlphaWorthMinutes{} minutes.
+\end{itemize}
+
+\section{Questions you should be ready for}
+
+\textbf{``Your complaint data is made up, so why believe any of this?''}
+Because the comparison is what matters, not the level. Both methods face the
+same complaints, the same campus and the same crew, so the gap between them
+is real even if the absolute numbers are not. And the ranking is stable
+across five independent streams and across every assumption we varied.
+
+\textbf{``Isn't 2-opt going to break the access windows?''} Yes, often. That
+is why every candidate move is re-evaluated for feasibility instead of being
+assumed valid. It is slower, and it is the only correct way to do it once
+jobs have windows.
+
+\textbf{``How do you know the heuristic is any good?''} On every instance
+small enough to solve exactly, it matched the optimum. Not proof for a
+sixty-job day, but the strongest evidence available without a commercial
+solver.
+
+\textbf{``What are its limits?''} It plans in the morning and never revises,
+so an urgent complaint raised at eleven waits for tomorrow. Repair times are
+assumed known in advance. And the exact check covers one technician with ten
+jobs, not nine with sixty.
+
+\end{document}

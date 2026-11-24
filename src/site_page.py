@@ -64,6 +64,9 @@ body{margin:0;background:var(--bg);color:var(--ink);
 header{padding:56px 0 28px;border-bottom:1px solid var(--line);margin-bottom:28px}
 h1{font-size:2.1rem;line-height:1.15;margin:0 0 10px;letter-spacing:-0.02em}
 .sub{color:var(--muted);font-size:1.05rem;margin:0}
+.downloads{margin:18px 0 0;display:flex;flex-wrap:wrap;gap:10px}
+.downloads a{display:inline-block;padding:7px 14px;border:1px solid var(--line);border-radius:999px;font-size:.92rem;text-decoration:none;color:var(--ink);background:var(--panel)}
+.downloads a:hover{border-color:var(--accent);color:var(--accent)}
 h2{font-size:1.3rem;margin:44px 0 10px;letter-spacing:-0.01em}
 h3{font-size:1.02rem;margin:26px 0 6px}
 p{margin:0 0 14px}
@@ -149,6 +152,11 @@ IIMA Estate Office maintenance crew, built on the real campus map.">
 <h1>Dispatching the dorm maintenance crew</h1>
 <p class="sub">An optimisation model for the IIMA Estate Office, built on the
 real campus map and run on synthetic complaint data.</p>
+<p class="downloads"><a href="report.pdf">Full report (PDF)</a>
+<a href="explainer.pdf">How it works, in 4 pages</a>
+<a href="dorm-dispatch.pptx">Slides</a>
+<a href="dispatch-model.xlsx">Results workbook</a>
+<a href="https://github.com/akshatvatsa7-ops/dorm-dispatch">Code on GitHub</a></p>
 </header>
 
 <p class="lede">The Estate Office gets maintenance complaints all day and works
@@ -309,6 +317,10 @@ Complaint data is synthetic. Study runtime {d['runtime_seconds']} s.
 
     # copy the downloadable artefacts next to the page
     for src, dst in ((os.path.join(ROOT, "report", "report.pdf"), "report.pdf"),
+                     (os.path.join(ROOT, "report", "explainer.pdf"),
+                      "explainer.pdf"),
+                     (os.path.join(ROOT, "slides", "dorm-dispatch.pptx"),
+                      "dorm-dispatch.pptx"),
                      (os.path.join(ROOT, "out", "dispatch-model.xlsx"),
                       "dispatch-model.xlsx")):
         if os.path.exists(src):

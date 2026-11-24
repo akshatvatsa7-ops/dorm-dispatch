@@ -174,15 +174,21 @@ def _poisson(rng, lam):
         k += 1
 
 
-def crew(per_trade=3):
+def crew(campus, per_trade=3):
     """
-    The technicians available. Each one can only do jobs in their own trade,
-    which is what makes the assignment part of the problem bite.
+    The technicians available.
+
+    Each one can only do jobs in their own trade, which is what makes the
+    assignment part of the problem bite, and each one starts and ends the day
+    at their own trade's store room: the electricians at Dorm 7 on the main
+    campus, the plumbers and carpenters at Dorm 24 on the new campus. The
+    'home' field is the index of that building in the campus location list.
     """
     out = []
     for trade in TRADES:
         for k in range(per_trade):
-            out.append({"name": f"{trade[:4]}-{k+1}", "trade": trade})
+            out.append({"name": f"{trade[:4]}-{k+1}", "trade": trade,
+                        "home": campus["depot"][trade]})
     return out
 
 
@@ -213,8 +219,11 @@ if __name__ == "__main__":
     print(f"  by priority: {s['by_priority']}")
     print(f"  repair work: {s['repair_minutes_by_trade']} minutes")
 
-    team = crew(3)
+    team = crew(c, 3)
     print(f"\ncrew of {len(team)}: {[t['name'] for t in team]}")
+    for trade in TRADES:
+        i = c["depot"][trade]
+        print(f"  {trade:11s} based at {c['names'][i]} ({c['zone'][i]} campus)")
     for trade in TRADES:
         n = sum(1 for t in team if t["trade"] == trade)
         capacity = n * WORKING_MINUTES_PER_DAY

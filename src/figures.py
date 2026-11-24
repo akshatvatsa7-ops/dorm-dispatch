@@ -66,37 +66,53 @@ def base_map(c, label_all=True):
     cv.circle(*a, 0.7, fill="tunnel")
     cv.circle(*b, 0.7, fill="tunnel")
     mid = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
-    cv.text(mid[0] + 6, mid[1] - 4.0, "walkway tunnel", colour="tunnel", size=2.1,
-            bold=True)
+    cv.text(mid[0] + 9, mid[1] + 3.0, "walkway tunnel", colour="tunnel",
+            size=2.1, bold=True)
 
     cv.text(8, MAP_H - 6, "NEW CAMPUS", colour="muted", size=2.6,
             anchor="left", bold=True)
     cv.text(MAP_W - 8, MAP_H - 6, "OLD CAMPUS", colour="muted", size=2.6,
             anchor="right", bold=True)
 
+    # The two store rooms the crews work out of. They are dormitories like
+    # any other, so they are drawn as a dorm with a ring round them rather
+    # than as a separate kind of place.
+    base_label = {}
+    for trade, i in c["depot"].items():
+        base_label.setdefault(i, []).append(trade)
+
     for i, (lat, lon) in enumerate(c["coords"]):
         x, y = P(lat, lon)
         cat = c["category"][i]
-        if cat == "depot":
-            cv.circle(x, y, 1.5, fill="depot")
-            cv.text(x, y - 3.4, "ESTATE OFFICE", colour="depot", size=2.1,
-                    bold=True)
+        if i in base_label:
+            cv.circle(x, y, 1.9, fill="depot")
+            cv.circle(x, y, 0.9, fill="paper")
+            cv.text(x, y - 4.0, c["short"][i].upper(), colour="depot",
+                    size=2.1, bold=True)
+            if label_all:
+                words = " + ".join(base_label[i])
+                cv.text(x, y - 6.8, words, colour="depot", size=1.8)
         else:
             cv.circle(x, y, 0.95, fill=cat, edge="paper", width=0.15)
-            # The 19 dorms sit in one tight cluster, so labelling each of
-            # them turns the map into a smudge. They are annotated as a
-            # group instead; the route figures number the stops in visiting
+            # The dorms sit in tight clusters, so labelling each of them
+            # turns the map into a smudge. They are annotated as a group
+            # instead; the route figures number the stops in visiting
             # order, which is what actually matters there.
             if label_all and cat != "dorm":
                 cv.text(x + 1.6, y, c["short"][i], colour="muted", size=1.9,
                         anchor="left")
 
     if label_all:
-        dorm_pts = [P(*c["coords"][i]) for i, cat in enumerate(c["category"])
-                    if cat == "dorm"]
-        cx = sum(p[0] for p in dorm_pts) / len(dorm_pts)
-        ylo = min(p[1] for p in dorm_pts)
-        cv.text(cx, ylo - 4.0, f"{len(dorm_pts)} dormitories", colour="dorm",
+        # Annotate the dorm cluster as a group rather than labelling every
+        # building. The two bases are labelled individually just above, so
+        # they are left out of the centroid to keep the text off them.
+        plain = [i for i, cat in enumerate(c["category"])
+                 if cat == "dorm" and i not in base_label]
+        pts = [P(*c["coords"][i]) for i in plain]
+        cx = sum(p[0] for p in pts) / len(pts)
+        yhi = max(p[1] for p in pts)
+        n_dorms = sum(1 for cat in c["category"] if cat == "dorm")
+        cv.text(cx, yhi + 4.0, f"{n_dorms} dormitories", colour="dorm",
                 size=2.2, bold=True)
     return cv, P
 
@@ -106,7 +122,7 @@ def fig_campus(c):
     # legend
     x, y = 6, 8
     for cat, label in (("dorm", "dormitory"), ("office", "academic / office"),
-                       ("facility", "facility"), ("depot", "depot")):
+                       ("facility", "facility"), ("depot", "crew base")):
         cv.circle(x, y, 1.0, fill=cat)
         cv.text(x + 2.0, y, label, colour="muted", size=2.0, anchor="left")
         x += 26
@@ -116,7 +132,7 @@ def fig_campus(c):
 def fig_routes(c, plan, team, trade, title):
     """Draw the routes of all technicians of one trade for a single day."""
     cv, P = base_map(c, label_all=False)
-    depot = P(*c["coords"][0])
+    home = c["depot"][trade]
     names = [m["name"] for m in team if m["trade"] == trade]
     mouth = {"new": P(*c["tunnel"]["new"]), "old": P(*c["tunnel"]["old"])}
 
@@ -138,8 +154,8 @@ def fig_routes(c, plan, team, trade, title):
         if not route:
             continue
         colour = ROUTE_COLOURS[k % len(ROUTE_COLOURS)]
-        stops = [0] + [t.site for t in route] + [0]
-        pts = [P(*c["coords"][0])]
+        stops = [home] + [t.site for t in route] + [home]
+        pts = [P(*c["coords"][home])]
         for a, b in zip(stops, stops[1:]):
             pts.extend(leg(a, b)[1:])
         cv.polyline(pts, colour=colour, width=0.45, opacity=0.9)

@@ -29,25 +29,32 @@ from instance import WORKING_MINUTES_PER_DAY, TRADES
 # What one minute of walking costs relative to one weighted hour of lateness.
 ALPHA = 0.05
 
-DEPOT = 0
+
+def homes(team):
+    """name -> the location index that technician starts and ends the day at."""
+    return {m["name"]: m["home"] for m in team}
 
 
 # ---------------------------------------------------------------------------
 # Evaluating a route
 # ---------------------------------------------------------------------------
 
-def run_route(route, walk, day):
+def run_route(route, walk, day, home):
     """
     Walk through a technician's day minute by minute and see what happens.
+
+    The technician leaves their own trade's store room at the start of the
+    shift and has to be back there by the end of it, so 'home' is the index
+    of Dorm 7 for an electrician and Dorm 24 for a plumber or carpenter.
 
     Returns (feasible, travel_minutes, finish_times) where finish_times maps
     each ticket to the absolute working minute at which it was completed.
     A route is infeasible if the technician reaches a job after its access
-    window has shut, or cannot get back to the depot by the end of the shift.
+    window has shut, or cannot get back to base by the end of the shift.
     """
     t = 0.0
     travel = 0.0
-    here = DEPOT
+    here = home
     finish = {}
     day_start = day * WORKING_MINUTES_PER_DAY
 
@@ -65,16 +72,16 @@ def run_route(route, walk, day):
         t = done
         here = tk.site
 
-    back = walk[here][DEPOT]
+    back = walk[here][home]
     travel += back
     if t + back > WORKING_MINUTES_PER_DAY:
         return False, 0.0, {}                # could not get home in time
     return True, travel, finish
 
 
-def route_cost(route, walk, day, alpha=ALPHA):
+def route_cost(route, walk, day, home, alpha=ALPHA):
     """Objective contribution of one route. Returns None if infeasible."""
-    ok, travel, finish = run_route(route, walk, day)
+    ok, travel, finish = run_route(route, walk, day, home)
     if not ok:
         return None
     late = sum(tk.weight * tk.tardiness_hours(finish[tk.tid]) for tk in route)
@@ -94,11 +101,11 @@ def deferral_cost(ticket, day):
     return ticket.weight * max(0.0, projected - ticket.due_abs) / 60.0
 
 
-def plan_cost(plan, deferred, walk, day, alpha=ALPHA):
+def plan_cost(plan, deferred, walk, day, home_of, alpha=ALPHA):
     """Total objective for a whole day: every route, plus what we put off."""
     total = 0.0
-    for route in plan.values():
-        c = route_cost(route, walk, day, alpha)
+    for name, route in plan.items():
+        c = route_cost(route, walk, day, home_of[name], alpha)
         if c is None:
             return None
         total += c
@@ -106,8 +113,8 @@ def plan_cost(plan, deferred, walk, day, alpha=ALPHA):
     return total
 
 
-def plan_travel(plan, walk, day):
-    return sum(run_route(r, walk, day)[1] for r in plan.values())
+def plan_travel(plan, walk, day, home_of):
+    return sum(run_route(r, walk, day, home_of[n])[1] for n, r in plan.items())
 
 
 # ---------------------------------------------------------------------------
@@ -131,7 +138,7 @@ def solve_fifo(tickets, team, walk, day, alpha=ALPHA):
         for m in sorted(candidates,
                         key=lambda m: sum(x.service for x in plan[m["name"]])):
             trial = plan[m["name"]] + [tk]
-            if run_route(trial, walk, day)[0]:
+            if run_route(trial, walk, day, m["home"])[0]:
                 plan[m["name"]] = trial
                 placed = True
                 break
@@ -148,17 +155,23 @@ def solve_savings(tickets, team, walk, day, alpha=ALPHA):
     """
     Clarke and Wright, one trade at a time.
 
-    Start with every ticket on its own out-and-back trip from the depot. The
-    saving from doing i and j on the same trip instead of two separate ones is
+    Start with every ticket on its own out-and-back trip from the trade's own
+    store room. The saving from doing i and j on the same trip instead of two
+    separate ones is
 
-        s_ij = walk[depot][i] + walk[depot][j] - walk[i][j]
+        s_ij = walk[base][i] + walk[base][j] - walk[i][j]
 
-    Work down the savings list, merging two routes whenever the merge is
-    legal. Because the depot is on the old campus and most dorms are on the
-    new campus, walk[depot][i] is large for nearly every ticket, so the
-    savings are large too: the heuristic is strongly pushed towards bundling
-    dorm visits into one trip across the tunnel, which is precisely what a
-    sensible human dispatcher would do.
+    where 'base' is Dorm 7 for the electricians and Dorm 24 for the plumbers
+    and carpenters. Work down the savings list, merging two routes whenever
+    the merge is legal.
+
+    Note what the two bases do to the savings list. For an electrician, a job
+    on the new campus has a large walk[base][i], so pairing two new-campus
+    jobs together shows up as a big saving and the heuristic bundles them into
+    one trip through the tunnel. For a plumber it is the main-campus jobs that
+    behave that way. Each trade is therefore pushed to batch its own far-side
+    work, which is exactly what a sensible human dispatcher would do, and the
+    two trades end up batching in opposite directions.
     """
     plan = {m["name"]: [] for m in team}
     deferred = []
@@ -168,10 +181,11 @@ def solve_savings(tickets, team, walk, day, alpha=ALPHA):
         jobs = [t for t in tickets if t.trade == trade]
         if not jobs:
             continue
+        base = next(m["home"] for m in team if m["trade"] == trade)
 
         routes = []
         for tk in jobs:
-            if run_route([tk], walk, day)[0]:
+            if run_route([tk], walk, day, base)[0]:
                 routes.append([tk])
             else:
                 deferred.append(tk)          # cannot be done at all today
@@ -180,7 +194,7 @@ def solve_savings(tickets, team, walk, day, alpha=ALPHA):
         for a in range(len(jobs)):
             for b in range(a + 1, len(jobs)):
                 i, j = jobs[a], jobs[b]
-                s = walk[DEPOT][i.site] + walk[DEPOT][j.site] - walk[i.site][j.site]
+                s = walk[base][i.site] + walk[base][j.site] - walk[i.site][j.site]
                 savings.append((s, a, b))
         savings.sort(reverse=True)
 
@@ -205,7 +219,7 @@ def solve_savings(tickets, team, walk, day, alpha=ALPHA):
                         ([B + A] if (B[-1] is j and A[0] is i) else []) + \
                         ([A + B[::-1]] if (A[-1] is i and B[-1] is j) else []) + \
                         ([A[::-1] + B] if (A[0] is i and B[0] is j) else []):
-                if run_route(cand, walk, day)[0]:
+                if run_route(cand, walk, day, base)[0]:
                     merged = cand
                     break
             if merged is None:
@@ -239,18 +253,18 @@ def _assign_routes_to_crew(routes, crew_here, plan, deferred, day):
 # Method 3: priority insertion (bang to buck)
 # ---------------------------------------------------------------------------
 
-def cheapest_insertion(route, tk, walk, day, alpha=ALPHA):
+def cheapest_insertion(route, tk, walk, day, home, alpha=ALPHA):
     """
     Find where in an existing route a ticket fits most cheaply.
     Returns (extra_cost, new_route) or None if it does not fit anywhere.
     """
-    base = route_cost(route, walk, day, alpha)
+    base = route_cost(route, walk, day, home, alpha)
     if base is None:
         return None
     best = None
     for pos in range(len(route) + 1):
         cand = route[:pos] + [tk] + route[pos:]
-        c = route_cost(cand, walk, day, alpha)
+        c = route_cost(cand, walk, day, home, alpha)
         if c is None:
             continue
         if best is None or c - base < best[0]:
@@ -281,7 +295,8 @@ def solve_priority(tickets, team, walk, day, alpha=ALPHA):
             for m in team:
                 if m["trade"] != tk.trade:
                     continue
-                got = cheapest_insertion(plan[m["name"]], tk, walk, day, alpha)
+                got = cheapest_insertion(plan[m["name"]], tk, walk, day,
+                                         m["home"], alpha)
                 if got is None:
                     continue
                 delta, cand = got
@@ -302,7 +317,7 @@ def solve_priority(tickets, team, walk, day, alpha=ALPHA):
 # Method 4: improvement heuristics
 # ---------------------------------------------------------------------------
 
-def two_opt(route, walk, day, alpha=ALPHA):
+def two_opt(route, walk, day, home, alpha=ALPHA):
     """
     Reverse a stretch of the route and keep the result if it is better.
 
@@ -311,7 +326,7 @@ def two_opt(route, walk, day, alpha=ALPHA):
     access windows a reversal often breaks feasibility, so every candidate is
     re-checked rather than assumed valid.
     """
-    best = route_cost(route, walk, day, alpha)
+    best = route_cost(route, walk, day, home, alpha)
     if best is None:
         return route, best
     improved = True
@@ -320,19 +335,19 @@ def two_opt(route, walk, day, alpha=ALPHA):
         for i in range(len(route) - 1):
             for j in range(i + 2, len(route) + 1):
                 cand = route[:i] + route[i:j][::-1] + route[j:]
-                c = route_cost(cand, walk, day, alpha)
+                c = route_cost(cand, walk, day, home, alpha)
                 if c is not None and c < best - 1e-9:
                     route, best, improved = cand, c, True
     return route, best
 
 
-def or_opt_within(route, walk, day, alpha=ALPHA, max_chain=3):
+def or_opt_within(route, walk, day, home, alpha=ALPHA, max_chain=3):
     """
     Lift out a run of one to three consecutive jobs and reinsert it elsewhere
     in the same route. Cheaper than 2-opt and it does not disturb the order
     of everything else, which matters when access windows are tight.
     """
-    best = route_cost(route, walk, day, alpha)
+    best = route_cost(route, walk, day, home, alpha)
     if best is None:
         return route, best
     improved = True
@@ -346,7 +361,7 @@ def or_opt_within(route, walk, day, alpha=ALPHA, max_chain=3):
                     if pos == i:
                         continue
                     cand = rest[:pos] + chunk + rest[pos:]
-                    c = route_cost(cand, walk, day, alpha)
+                    c = route_cost(cand, walk, day, home, alpha)
                     if c is not None and c < best - 1e-9:
                         route, best, improved = cand, c, True
                         break
@@ -367,6 +382,7 @@ def or_opt_across(plan, team, walk, day, alpha=ALPHA, max_chain=2):
     couple of jobs across fixes that.
     """
     trade_of = {m["name"]: m["trade"] for m in team}
+    home_of = homes(team)
     improved = True
     while improved:
         improved = False
@@ -378,15 +394,16 @@ def or_opt_across(plan, team, walk, day, alpha=ALPHA, max_chain=2):
                     for i in range(len(plan[src]) - size + 1):
                         chunk = plan[src][i:i + size]
                         new_src = plan[src][:i] + plan[src][i + size:]
-                        c_src_old = route_cost(plan[src], walk, day, alpha)
-                        c_dst_old = route_cost(plan[dst], walk, day, alpha)
-                        c_src_new = route_cost(new_src, walk, day, alpha)
+                        h_src, h_dst = home_of[src], home_of[dst]
+                        c_src_old = route_cost(plan[src], walk, day, h_src, alpha)
+                        c_dst_old = route_cost(plan[dst], walk, day, h_dst, alpha)
+                        c_src_new = route_cost(new_src, walk, day, h_src, alpha)
                         if c_src_new is None:
                             continue
                         best_dst = None
                         for pos in range(len(plan[dst]) + 1):
                             cand = plan[dst][:pos] + chunk + plan[dst][pos:]
-                            c = route_cost(cand, walk, day, alpha)
+                            c = route_cost(cand, walk, day, h_dst, alpha)
                             if c is not None and (best_dst is None or c < best_dst[0]):
                                 best_dst = (c, cand)
                         if best_dst is None:
@@ -414,14 +431,16 @@ def improve(plan, deferred, team, walk, day, alpha=ALPHA):
     We also try to rescue deferred tickets, since a tidier route may have
     opened up room for one.
     """
+    home_of = homes(team)
     for _ in range(3):
-        before = plan_cost(plan, deferred, walk, day, alpha)
+        before = plan_cost(plan, deferred, walk, day, home_of, alpha)
         plan = or_opt_across(plan, team, walk, day, alpha)
         for name in plan:
-            plan[name], _ = two_opt(plan[name], walk, day, alpha)
-            plan[name], _ = or_opt_within(plan[name], walk, day, alpha)
+            h = home_of[name]
+            plan[name], _ = two_opt(plan[name], walk, day, h, alpha)
+            plan[name], _ = or_opt_within(plan[name], walk, day, h, alpha)
         plan, deferred = rescue_deferred(plan, deferred, team, walk, day, alpha)
-        after = plan_cost(plan, deferred, walk, day, alpha)
+        after = plan_cost(plan, deferred, walk, day, home_of, alpha)
         if after is None or before is None or after > before - 1e-6:
             break
     return plan, deferred
@@ -435,7 +454,8 @@ def rescue_deferred(plan, deferred, team, walk, day, alpha=ALPHA):
         for m in team:
             if m["trade"] != tk.trade:
                 continue
-            got = cheapest_insertion(plan[m["name"]], tk, walk, day, alpha)
+            got = cheapest_insertion(plan[m["name"]], tk, walk, day,
+                                     m["home"], alpha)
             if got is None:
                 continue
             delta, cand = got

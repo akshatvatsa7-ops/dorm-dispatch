@@ -34,15 +34,20 @@ We build a small graph and run Dijkstra on it:
     penalty for going down the ramp and back up;
   - nothing else crosses the road.
 
-Note where the depot is. The Estate Office sits on the old campus, while 19 of
-the 23 complaint sites are dorms on the new campus. Every technician therefore
-starts the day on the wrong side of the road and has to use the tunnel at
-least twice. That single fact is what makes the routing worth optimising.
+Where the crews start from
+--------------------------
+The three trades are not kept in one yard. The electricians have their store
+room in Dorm 7, which is on the main campus, and the plumbers and carpenters
+share one in Dorm 24, which is on the new campus. So the crews begin the day
+on opposite sides of the road from each other, and whichever trade is called
+to the far side has to use the tunnel to get there and again to get home.
+That is the fact that makes the routing worth optimising: a plumber sent to
+the main campus for one job has spent twenty minutes walking before he has
+turned a single tap, so it is worth collecting every main-campus plumbing job
+into the same trip.
 
 Dijkstra then works out, for any pair of locations, whether the trip stays on
-one side or has to go through the tunnel, and what that costs. The detour
-factor is not guessed: it is measured from the road network in the OSM
-extract, in calibrate_detour_factor() below.
+one side or has to go through the tunnel, and what that costs.
 """
 
 import json
@@ -77,11 +82,34 @@ WALKABLE = {
     "service", "residential", "unclassified", "track", "tertiary",
 }
 
-# The places technicians get sent to. Names match the OSM 'name' tag exactly.
+# The places technicians get sent to. Names match the OSM 'name' tag exactly,
+# except for the two in EXTRA_SITES below.
 DORMS = (
+    ["Dorm 7"] +                                  # main campus, electricians' base
     [f"Dormitory {i}" for i in range(10, 21)] +   # 11 dorms
+    ["Dorm 24"] +                                 # new campus, plumbers/carpenters' base
     [f"Dorm {i}" for i in range(28, 36)]          # 8 dorms
 )
+
+# Two dormitories we need are not named individually in OpenStreetMap, so we
+# place them ourselves. The official IIMA campus map groups the dormitories as
+# D1-D18 on the main campus and D19-D27, D28-D35 and D36-D43 on the new
+# campus, and OSM does carry the matching building footprints even though it
+# does not label them one by one. Each coordinate below is the footprint of a
+# real building in that group, picked by counting outwards from the landmark
+# the numbering runs from: Louis Kahn Plaza for the D1-D18 block, the tunnel
+# for the D19-D27 block. They are therefore right to within a building or two,
+# which is far finer than anything else in this model needs.
+#
+# A caution for anyone reading the location table: OSM labels several
+# new-campus blocks "Dormitory 10" to "Dormitory 20", which clashes with the
+# official map, where D10-D18 are main-campus buildings. We keep the OSM names
+# because they are what the map data says, but the numbers on those particular
+# blocks should not be read as official dorm numbers.
+EXTRA_SITES = {
+    "Dorm 7":  (23.031276, 72.536721),   # D1-D18 block, main campus
+    "Dorm 24": (23.031464, 72.532245),   # D19-D27 block, new campus
+}
 
 OTHER_SITES = [
     ("Student Activity Block", "facility"),
@@ -96,11 +124,16 @@ OTHER_SITES = [
     ("Kasturbhai Lalbhai Management Development Center", "facility"),
 ]
 
-DEPOT_NAME = "Estate Office"
+# Which building each trade starts and ends its day at.
+TRADE_DEPOT = {
+    "electrical": "Dorm 7",
+    "plumbing":   "Dorm 24",
+    "carpentry":  "Dorm 24",
+}
 
 # Short labels for figures and tables.
 SHORT = {
-    "Estate Office": "Depot",
+    "Estate Office": "Estate Off",
     "Student Activity Block": "SAB",
     "IMDC Dining Hall": "Dining",
     "International Management Development Center": "IMDC",
@@ -208,19 +241,25 @@ def build():
     Assemble the locations and the walking-time matrix.
 
     Returns a dict with
-        names      list of location names, index 0 is the depot
+        names      list of location names
         short      short labels for figures
         coords     list of (lat, lon) in the same order
-        category   'depot' / 'dorm' / 'office' / 'facility'
+        category   'dorm' / 'office' / 'facility'
         zone       'new' / 'old'
         walk       walk[i][j] = walking minutes from i to j
+        depot      {trade: location index the trade starts and ends at}
         meta       notes on how the matrix was built
+
+    Note that the two depots are ordinary dormitories as well: students live
+    in Dorm 7 and Dorm 24 and raise complaints from them like anywhere else.
+    The store room just happens to be in the same building.
     """
-    buildings = load_buildings()
+    buildings = dict(load_buildings())
+    buildings.update(EXTRA_SITES)
     mouth_new, mouth_old, tunnel_len = tunnel_mouths()
 
-    wanted = [(DEPOT_NAME, "depot")]
-    wanted += [(d, "dorm") for d in DORMS]
+    wanted = [(d, "dorm") for d in DORMS]
+    wanted += [("Estate Office", "office")]
     wanted += OTHER_SITES
 
     names, latlon, category, missing = [], [], [], []
@@ -269,6 +308,8 @@ def build():
             if i != j:
                 walk[i][j] = round(dist[j], 2)
 
+    depot = {trade: names.index(site) for trade, site in TRADE_DEPOT.items()}
+
     return {
         "names": names,
         "short": [short_name(x) for x in names],
@@ -276,9 +317,13 @@ def build():
         "category": category,
         "zone": zone,
         "walk": walk,
+        "depot": depot,
         "tunnel": {"new": mouth_new, "old": mouth_old,
                    "length_m": round(tunnel_len, 1)},
         "meta": {
+            "depots": {t: names[i] for t, i in depot.items()},
+            "depot_zones": {t: zone[i] for t, i in depot.items()},
+            "placed_by_hand": sorted(EXTRA_SITES),
             "walk_speed_m_per_min": WALK_SPEED_M_PER_MIN,
             "detour_factor": DETOUR_FACTOR,
             "tunnel_penalty_min": TUNNEL_PENALTY_MIN,
@@ -306,6 +351,10 @@ if __name__ == "__main__":
     print(f"walk time: min {min(flat):.1f}  mean {sum(flat)/len(flat):.1f}  "
           f"max {max(flat):.1f} min")
 
+    print("depots:")
+    for trade, i in c["depot"].items():
+        print(f"  {trade:11s} {c['names'][i]:10s} ({c['zone'][i]} campus)")
+
     def show(a, b):
         i, j = nm.index(a), nm.index(b)
         d = haversine_m(*c["coords"][i], *c["coords"][j])
@@ -315,5 +364,6 @@ if __name__ == "__main__":
     print("sanity checks:")
     show("D32", "Library")      # across the tunnel
     show("D32", "D33")          # neighbours
-    show("Depot", "D10")        # depot to the far dorm cluster
-    show("Depot", "Library")    # within the old campus
+    show("D7", "D24")           # one depot to the other, through the tunnel
+    show("D7", "Library")       # electricians' base to a main-campus site
+    show("D24", "D32")          # plumbers' base to a new-campus dorm

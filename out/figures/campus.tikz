@@ -5,11 +5,13 @@
 \draw[draw=figtunnel,line width=0.8mm,line cap=round] (71.58,36.42) -- (85.57,28.42);
 \filldraw[fill=figtunnel] (71.58,36.42) circle (0.70mm);
 \filldraw[fill=figtunnel] (85.57,28.42) circle (0.70mm);
-\node[text=figtunnel,inner sep=0pt,font=\fontsize{5.5}{6.6}\selectfont] at (84.58,28.42) {\bfseries walkway tunnel};
+\node[text=figtunnel,inner sep=0pt,font=\fontsize{5.5}{6.6}\selectfont] at (87.58,35.42) {\bfseries walkway tunnel};
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{6.8}{8.1}\selectfont] at (8.00,80.00) {\bfseries NEW CAMPUS};
 \node[anchor=east,text=figmuted,inner sep=0pt,font=\fontsize{6.8}{8.1}\selectfont] at (160.00,80.00) {\bfseries OLD CAMPUS};
-\filldraw[fill=figdepot] (107.56,20.77) circle (1.50mm);
-\node[text=figdepot,inner sep=0pt,font=\fontsize{5.5}{6.6}\selectfont] at (107.56,17.37) {\bfseries ESTATE OFFICE};
+\filldraw[fill=figdepot] (123.48,15.06) circle (1.90mm);
+\filldraw[fill=figpaper] (123.48,15.06) circle (0.90mm);
+\node[text=figdepot,inner sep=0pt,font=\fontsize{5.5}{6.6}\selectfont] at (123.48,11.06) {\bfseries D7};
+\node[text=figdepot,inner sep=0pt,font=\fontsize{4.7}{5.6}\selectfont] at (123.48,8.26) {electrical};
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (15.61,40.22) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (18.55,38.82) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (17.48,34.27) circle (0.95mm);
@@ -21,6 +23,10 @@
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (23.22,31.28) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (22.23,26.53) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (27.19,34.47) circle (0.95mm);
+\filldraw[fill=figdepot] (45.24,18.64) circle (1.90mm);
+\filldraw[fill=figpaper] (45.24,18.64) circle (0.90mm);
+\node[text=figdepot,inner sep=0pt,font=\fontsize{5.5}{6.6}\selectfont] at (45.24,14.64) {\bfseries D24};
+\node[text=figdepot,inner sep=0pt,font=\fontsize{4.7}{5.6}\selectfont] at (45.24,11.84) {plumbing + carpentry};
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (41.26,28.57) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (35.88,29.33) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (31.05,29.84) circle (0.95mm);
@@ -29,6 +35,8 @@
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (35.51,18.90) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (40.16,18.59) circle (0.95mm);
 \filldraw[fill=figdorm,draw=figpaper,line width=0.15mm] (40.93,23.92) circle (0.95mm);
+\filldraw[fill=figoffice,draw=figpaper,line width=0.15mm] (107.56,20.77) circle (0.95mm);
+\node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{4.9}{5.9}\selectfont] at (109.16,20.77) {Estate Off};
 \filldraw[fill=figfacility,draw=figpaper,line width=0.15mm] (35.48,24.37) circle (0.95mm);
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{4.9}{5.9}\selectfont] at (37.08,24.37) {SAB};
 \filldraw[fill=figfacility,draw=figpaper,line width=0.15mm] (36.26,56.43) circle (0.95mm);
@@ -49,7 +57,7 @@
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{4.9}{5.9}\selectfont] at (116.47,37.24) {RJMCEI};
 \filldraw[fill=figfacility,draw=figpaper,line width=0.15mm] (152.39,7.00) circle (0.95mm);
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{4.9}{5.9}\selectfont] at (153.99,7.00) {KLMDC};
-\node[text=figdorm,inner sep=0pt,font=\fontsize{5.7}{6.9}\selectfont] at (26.92,14.59) {\bfseries 19 dormitories};
+\node[text=figdorm,inner sep=0pt,font=\fontsize{5.7}{6.9}\selectfont] at (26.92,44.22) {\bfseries 21 dormitories};
 \filldraw[fill=figdorm] (6.00,8.00) circle (1.00mm);
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{5.2}{6.2}\selectfont] at (8.00,8.00) {dormitory};
 \filldraw[fill=figoffice] (32.00,8.00) circle (1.00mm);
@@ -57,5 +65,5 @@
 \filldraw[fill=figfacility] (58.00,8.00) circle (1.00mm);
 \node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{5.2}{6.2}\selectfont] at (60.00,8.00) {facility};
 \filldraw[fill=figdepot] (84.00,8.00) circle (1.00mm);
-\node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{5.2}{6.2}\selectfont] at (86.00,8.00) {depot};
+\node[anchor=west,text=figmuted,inner sep=0pt,font=\fontsize{5.2}{6.2}\selectfont] at (86.00,8.00) {crew base};
 \end{tikzpicture}

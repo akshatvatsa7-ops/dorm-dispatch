@@ -5,11 +5,13 @@
 <line x1="270.59" y1="187.43" x2="323.47" y2="217.66" stroke="#1F4E79" stroke-width="3.02" stroke-linecap="round" opacity="1.0"/>
 <circle cx="270.59" cy="187.43" r="2.65" fill="#1F4E79" opacity="1.0"/>
 <circle cx="323.47" cy="217.66" r="2.65" fill="#1F4E79" opacity="1.0"/>
-<text x="319.71" y="220.45" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#1F4E79" font-weight="600">walkway tunnel</text>
+<text x="331.05" y="193.99" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#1F4E79" font-weight="600">walkway tunnel</text>
 <text x="30.24" y="26.12" text-anchor="start" font-size="9.8" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280" font-weight="600">NEW CAMPUS</text>
 <text x="604.8" y="26.12" text-anchor="end" font-size="9.8" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280" font-weight="600">OLD CAMPUS</text>
-<circle cx="406.59" cy="246.55" r="5.67" fill="#C62828" opacity="1.0"/>
-<text x="406.59" y="262.18" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#C62828" font-weight="600">ESTATE OFFICE</text>
+<circle cx="466.77" cy="268.14" r="7.18" fill="#C62828" opacity="1.0"/>
+<circle cx="466.77" cy="268.14" r="3.40" fill="#FFFFFF" opacity="1.0"/>
+<text x="466.77" y="286.04" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#C62828" font-weight="600">D7</text>
+<text x="466.77" y="296.22" text-anchor="middle" font-size="6.8" font-family="Inter, Helvetica, Arial, sans-serif" fill="#C62828">electrical</text>
 <circle cx="58.99" cy="173.04" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="70.13" cy="178.32" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="66.06" cy="195.56" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
@@ -21,6 +23,10 @@
 <circle cx="87.79" cy="206.84" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="84.04" cy="224.79" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="102.76" cy="194.79" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
+<circle cx="171.02" cy="254.64" r="7.18" fill="#C62828" opacity="1.0"/>
+<circle cx="171.02" cy="254.64" r="3.40" fill="#FFFFFF" opacity="1.0"/>
+<text x="171.02" y="272.54" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#C62828" font-weight="600">D24</text>
+<text x="171.02" y="282.72" text-anchor="middle" font-size="6.8" font-family="Inter, Helvetica, Arial, sans-serif" fill="#C62828">plumbing + carpentry</text>
 <circle cx="155.97" cy="217.09" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="135.62" cy="214.2" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="117.38" cy="212.29" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
@@ -29,6 +35,8 @@
 <circle cx="134.24" cy="253.65" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="151.79" cy="254.82" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <circle cx="154.72" cy="234.68" r="3.59" fill="#2E7D32" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
+<circle cx="406.59" cy="246.55" r="3.59" fill="#6A4C93" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
+<text x="412.64" y="249.06" text-anchor="start" font-size="7.2" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">Estate Off</text>
 <circle cx="134.11" cy="232.95" r="3.59" fill="#B26500" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <text x="140.16" y="235.46" text-anchor="start" font-size="7.2" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">SAB</text>
 <circle cx="137.05" cy="111.79" r="3.59" fill="#B26500" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
@@ -49,7 +57,7 @@
 <text x="440.24" y="186.83" text-anchor="start" font-size="7.2" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">RJMCEI</text>
 <circle cx="576.05" cy="298.62" r="3.59" fill="#B26500" opacity="1.0" stroke="#FFFFFF" stroke-width="0.57"/>
 <text x="582.1" y="301.13" text-anchor="start" font-size="7.2" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">KLMDC</text>
-<text x="101.76" y="272.85" text-anchor="middle" font-size="8.3" font-family="Inter, Helvetica, Arial, sans-serif" fill="#2E7D32" font-weight="600">19 dormitories</text>
+<text x="101.76" y="160.83" text-anchor="middle" font-size="8.3" font-family="Inter, Helvetica, Arial, sans-serif" fill="#2E7D32" font-weight="600">21 dormitories</text>
 <circle cx="22.68" cy="294.84" r="3.78" fill="#2E7D32" opacity="1.0"/>
 <text x="30.24" y="297.49" text-anchor="start" font-size="7.6" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">dormitory</text>
 <circle cx="120.96" cy="294.84" r="3.78" fill="#6A4C93" opacity="1.0"/>
@@ -57,5 +65,5 @@
 <circle cx="219.24" cy="294.84" r="3.78" fill="#B26500" opacity="1.0"/>
 <text x="226.8" y="297.49" text-anchor="start" font-size="7.6" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">facility</text>
 <circle cx="317.52" cy="294.84" r="3.78" fill="#C62828" opacity="1.0"/>
-<text x="325.08" y="297.49" text-anchor="start" font-size="7.6" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">depot</text>
+<text x="325.08" y="297.49" text-anchor="start" font-size="7.6" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">crew base</text>
 </svg>

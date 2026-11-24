@@ -170,13 +170,17 @@ plans the day instead.</p>
 </div>
 
 <h2>Why the campus makes this hard</h2>
-<p>A main road cuts the campus in two. The Estate Office sits on the old
-campus; {c['dorms']} of the {c['complaint_sites']} places that raise
-complaints are dormitories on the new campus. There is no crossing at road level, so every
-trip between the two halves goes through the walkway tunnel and takes about
-{c['mean_cross_campus']} minutes, against {c['mean_same_campus']} minutes for a
-trip that stays on one side. Every technician starts the day on the wrong side
-of the road.</p>
+<p>A main road cuts the campus in two and there is no crossing at road level,
+so every trip between the two halves goes through the walkway tunnel and takes
+about {c['mean_cross_campus']} minutes, against {c['mean_same_campus']} minutes
+for a trip that stays on one side.</p>
+<p>The crews make that worse without meaning to, because they are not in one
+place. The electricians work out of a store room in Dorm 7 on the main campus;
+the plumbers and carpenters share one in Dorm 24 on the new campus. So the two
+groups start each morning on opposite sides of the road, and for each of them
+about half the campus is on the far side of the tunnel. The same job is cheap
+for one trade and expensive for another, which means a sensible bundle of work
+for the electricians is not a sensible bundle for the plumbers.</p>
 
 <figure>{svg("campus")}
 <figcaption>The campus as the model sees it. Coordinates come from
@@ -188,8 +192,8 @@ that.</figcaption></figure>
 <p>Given the complaints waiting at the start of a day, it decides which
 technician takes which jobs and in what order. A technician can only be given
 work in their own trade, every job has a window during which somebody is there
-to open the door, and everyone has to be back at the depot by the end of the
-shift. What it minimises is weighted lateness, with a small charge for walking
+to open the door, and everyone has to be back at their own trade's store room
+by the end of the shift. What it minimises is weighted lateness, with a small charge for walking
 so that walking breaks ties rather than driving the answer:</p>
 <pre>minimise   sum of (weight x hours late)  +  0.05 x walking minutes</pre>
 <p>Urgent complaints carry a weight of 10, normal ones 4, minor ones 1.
@@ -257,20 +261,21 @@ urgent complaints raised over the month,
 {d['methods']['savings+improve']['urgent_impossible']} could never have met the
 four-hour promise, no matter who was sent: the room can only be accessed in the
 afternoon and the repair runs past the deadline. The optimised plan closed
-{d['methods']['savings+improve']['urgent_late']} urgent complaints late, of
-which {d['methods']['savings+improve']['urgent_late_but_impossible']} were of
-exactly that kind. That leaves
-{d['methods']['savings+improve']['urgent_avoidable_misses']} genuinely avoidable
-late urgent complaint in thirty days. We are within one ticket of the best any
-dispatcher could do, and what remains is a problem with the promise rather than
-with the plan.</p></div>
+{d['methods']['savings+improve']['urgent_late']} urgent complaints late, and
+all {d['methods']['savings+improve']['urgent_late_but_impossible']} of them
+were of exactly that kind. The two numbers are the same number: every urgent
+complaint that could have been closed on time was closed on time, and there is
+nothing left for a better algorithm to find. What remains is a problem with
+the promise rather than with the plan.</p></div>
 
 <h2>What we would tell the Estate Office</h2>
 <ul>
 <li>Plan the day in the morning instead of working the queue as it arrives.
-  Worth about a third of the crew's walking and roughly double the share of
-  urgent complaints closed on time, with no extra staff.</li>
-<li>Bundle by campus. Cross the tunnel, work the cluster, come back.</li>
+  Worth {round(100 * (d['methods']['fifo']['travel_per_tech_day'] - d['methods']['savings+improve']['travel_per_tech_day']) / d['methods']['fifo']['travel_per_tech_day'], 1)}% of the crew's walking and more than double the
+  share of urgent complaints closed on time, with no extra staff.</li>
+<li>Bundle by campus, and remember each trade has its own far side. The
+  electricians should be batching new-campus work and the plumbers and
+  carpenters main-campus work, crossing in opposite directions.</li>
 <li>Do not hire. Nine technicians is enough for this load.</li>
 <li>Do not rebalance the trades to match average workload. The quiet trade is
   quiet on average, not on a bad day.</li>

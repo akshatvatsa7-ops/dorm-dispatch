@@ -43,7 +43,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from dispatch import ALPHA, DEPOT, run_route, route_cost
+from dispatch import ALPHA, run_route, route_cost, deferral_cost
 from instance import WORKING_MINUTES_PER_DAY
 
 
@@ -53,24 +53,14 @@ class Counter:
         self.fathomed = 0
 
 
-def _cheapest_entry(walk, sites, candidates):
-    """
-    For each job still to do, the cheapest walk into it from anywhere we might
-    plausibly be. Summed, this is a floor on the travel still to come.
-    """
-    total = 0.0
-    for j in candidates:
-        best = min(walk[i][sites[j]]
-                   for i in set([DEPOT] + [sites[k] for k in candidates])
-                   if i != sites[j])
-        total += best
-    return total
-
-
-def solve_exact(tickets, walk, day, alpha=ALPHA, incumbent_route=None,
+def solve_exact(tickets, walk, day, home, alpha=ALPHA, incumbent_route=None,
                 time_limit=60.0, nearest_first=True):
     """
     Find the cheapest feasible order for one technician to do these tickets.
+
+    'home' is the store room the technician leaves from and returns to, so the
+    same set of jobs has a different optimum for an electrician working out of
+    Dorm 7 than for a plumber working out of Dorm 24.
 
     Returns a dict with the best route, its cost, how many nodes the search
     looked at, and whether it finished or ran out of time.
@@ -79,11 +69,21 @@ def solve_exact(tickets, walk, day, alpha=ALPHA, incumbent_route=None,
     sites = [t.site for t in tickets]
     day_start = day * WORKING_MINUTES_PER_DAY
 
-    best = {"route": None, "cost": float("inf")}
+    # What each ticket costs if we simply do not get to it today. The
+    # technician is allowed to leave jobs undone - that is a real option, and
+    # the heuristics take it - so the search has to be allowed to take it too,
+    # otherwise we would be comparing against an "optimum" that is solving a
+    # different and harder problem than the heuristics are.
+    defer = [deferral_cost(t, day) for t in tickets]
+
+    best = {"route": None, "cost": float("inf"), "deferred": None}
     if incumbent_route is not None:
-        c = route_cost(incumbent_route, walk, day, alpha)
+        c = route_cost(incumbent_route, walk, day, home, alpha)
         if c is not None:
-            best = {"route": list(incumbent_route), "cost": c}
+            left = [t for t in tickets if t not in incumbent_route]
+            best = {"route": list(incumbent_route),
+                    "cost": c + sum(deferral_cost(t, day) for t in left),
+                    "deferred": left}
 
     counter = Counter()
     start_time = time.time()
@@ -95,24 +95,40 @@ def solve_exact(tickets, walk, day, alpha=ALPHA, incumbent_route=None,
             timed_out[0] = True
             return
 
-        if not remaining:
-            total_travel = travel + walk[here][DEPOT]
-            if now + walk[here][DEPOT] > WORKING_MINUTES_PER_DAY:
-                return
-            cost = late + alpha * total_travel
+        # Stopping here and deferring whatever is left is itself a complete,
+        # legal plan, so every node is a candidate answer and not just the
+        # ones that have run out of jobs.
+        back = walk[here][home]
+        if now + back <= WORKING_MINUTES_PER_DAY:
+            cost = late + alpha * (travel + back) + sum(defer[j] for j in remaining)
             if cost < best["cost"]:
                 best["route"] = [tickets[i] for i in order]
                 best["cost"] = cost
+                best["deferred"] = [tickets[j] for j in remaining]
+
+        if not remaining:
             return
 
         # --- the bound -------------------------------------------------
-        travel_floor = alpha * (travel + _cheapest_entry(walk, sites, remaining))
+        # Two parts, both of which have to be true of any way of finishing
+        # from here.
+        #
+        # Travel: whatever has been walked already, plus the walk home. The
+        # walking times come from a shortest-path calculation, so going
+        # anywhere else first and then home can only cost more.
+        #
+        # Lateness: each job still open will either be done today, and the
+        # earliest it could possibly finish gives its smallest possible
+        # lateness, or be left for tomorrow at its deferral cost. Whichever
+        # of the two is cheaper is a floor on what that job will cost.
+        travel_floor = alpha * (travel + back)
         late_floor = 0.0
         for j in remaining:
             tk = tickets[j]
             earliest_done = max(now, tk.win_start) + tk.service
-            late_floor += tk.weight * max(0.0,
-                                          day_start + earliest_done - tk.due_abs) / 60.0
+            if_done = tk.weight * max(0.0,
+                                      day_start + earliest_done - tk.due_abs) / 60.0
+            late_floor += min(if_done, defer[j])
         if late + travel_floor + late_floor >= best["cost"]:
             counter.fathomed += 1
             return
@@ -140,11 +156,13 @@ def solve_exact(tickets, walk, day, alpha=ALPHA, incumbent_route=None,
                     travel + walk[here][sites[j]],
                     late + tk.weight * max(0.0, day_start + done - tk.due_abs) / 60.0)
 
-    recurse([], list(range(n)), DEPOT, 0.0, 0.0, 0.0)
+    recurse([], list(range(n)), home, 0.0, 0.0, 0.0)
 
     return {
         "route": best["route"],
-        "cost": round(best["cost"], 3) if best["route"] else None,
+        "deferred": best["deferred"],
+        "served": len(best["route"]) if best["route"] is not None else 0,
+        "cost": round(best["cost"], 3) if best["route"] is not None else None,
         "nodes": counter.nodes,
         "fathomed": counter.fathomed,
         "seconds": round(time.time() - start_time, 2),
@@ -168,26 +186,31 @@ def benchmark(campus, day=0, seed=2026, n_jobs=9, trade="electrical",
     tickets, _ = inst.generate_day(day, rng, campus,
                                    tickets_per_day or inst.TICKETS_PER_DAY)
     pool = [t for t in tickets if t.trade == trade][:n_jobs]
-    one = [{"name": "tech-1", "trade": trade}]
+    home = campus["depot"][trade]
+    one = [{"name": "tech-1", "trade": trade, "home": home}]
 
     rows = []
     heuristic_routes = {}
     for name, fn in dispatch.METHODS.items():
         plan, deferred = fn(pool, one, walk, day, alpha)
         route = plan["tech-1"]
-        c = route_cost(route, walk, day, alpha)
+        # The whole cost of the decision, not just the cost of the route: a
+        # method that quietly leaves three jobs undone has to be charged for
+        # them, or it would look better than one that did the work.
+        c = dispatch.plan_cost(plan, deferred, walk, day,
+                               {"tech-1": home}, alpha)
         heuristic_routes[name] = route
-        rows.append({"method": name, "cost": round(c, 3) if c else None,
+        rows.append({"method": name, "cost": round(c, 3) if c is not None else None,
                      "served": len(route), "deferred": len(deferred)})
 
     # Three runs of the same search, to separate what the bound is worth
     # from what a good starting solution is worth.
-    warm = solve_exact(pool, walk, day, alpha,
+    warm = solve_exact(pool, walk, day, home, alpha,
                        incumbent_route=heuristic_routes["savings+improve"])
-    cold = solve_exact(pool, walk, day, alpha, incumbent_route=None)
-    naive = solve_exact(pool, walk, day, alpha, incumbent_route=None,
+    cold = solve_exact(pool, walk, day, home, alpha, incumbent_route=None)
+    naive = solve_exact(pool, walk, day, home, alpha, incumbent_route=None,
                         nearest_first=False)
-    naive_warm = solve_exact(pool, walk, day, alpha, nearest_first=False,
+    naive_warm = solve_exact(pool, walk, day, home, alpha, nearest_first=False,
                              incumbent_route=heuristic_routes["savings+improve"])
 
     for r in rows:
@@ -195,7 +218,8 @@ def benchmark(campus, day=0, seed=2026, n_jobs=9, trade="electrical",
             r["gap_pct"] = round(100 * (r["cost"] - warm["cost"]) / warm["cost"], 1)
     return {"instance": pool, "heuristics": rows, "exact": warm,
             "exact_cold": cold, "exact_naive": naive,
-            "exact_naive_warm": naive_warm, "trade": trade}
+            "exact_naive_warm": naive_warm, "trade": trade,
+            "home": home, "home_name": campus["names"][home]}
 
 
 if __name__ == "__main__":

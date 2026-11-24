@@ -1,31 +1,33 @@
 index,name,short,category,campus,latitude,longitude,walk from depot (min)
-0,Estate Office,Depot,depot,old,23.031577,72.53581,0.0
-1,Dormitory 10,D10,dorm,new,23.032601,72.530549,11.31
-2,Dormitory 11,D11,dorm,new,23.032527,72.530718,11.01
-3,Dormitory 12,D12,dorm,new,23.032287,72.530657,11.11
-4,Dormitory 13,D13,dorm,new,23.032036,72.530601,11.25
-5,Dormitory 14,D14,dorm,new,23.032455,72.530884,10.71
-6,Dormitory 15,D15,dorm,new,23.032205,72.530825,10.83
-7,Dormitory 16,D16,dorm,new,23.031957,72.530764,10.99
-8,Dormitory 17,D17,dorm,new,23.032385,72.531044,10.42
-9,Dormitory 18,D18,dorm,new,23.03213,72.530985,10.55
-10,Dormitory 19,D19,dorm,new,23.03188,72.530929,10.73
-11,Dormitory 20,D20,dorm,new,23.032297,72.531212,10.13
-12,Dorm 28,D28,dorm,new,23.031987,72.532017,8.8
-13,Dorm 29,D29,dorm,new,23.032027,72.531709,9.31
-14,Dorm 30,D30,dorm,new,23.032054,72.531433,9.79
-15,Dorm 31,D31,dorm,new,23.03177,72.531398,9.97
-16,Dorm 32,D32,dorm,new,23.031532,72.531372,10.16
-17,Dorm 33,D33,dorm,new,23.031478,72.531688,9.69
-18,Dorm 34,D34,dorm,new,23.031461,72.531954,9.29
-19,Dorm 35,D35,dorm,new,23.031742,72.531998,8.98
-20,Student Activity Block,SAB,facility,new,23.031766,72.531686,9.48
-21,IMDC Dining Hall,Dining,facility,new,23.033454,72.531731,9.74
-22,International Management Development Center,IMDC,facility,new,23.034127,72.531878,10.32
-23,Center for Innovation Incubation & Entrepreneurship,CIIE,office,new,23.034642,72.532646,10.37
-24,Administrative Block,Admin,office,old,23.032756,72.536122,2.34
-25,Computer Center,Comp Ctr,office,old,23.032701,72.53579,2.17
-26,Faculty Wings,Faculty,office,old,23.032128,72.535906,1.08
-27,Vikram Sarabhai Library,Library,office,old,23.031632,72.536351,0.97
-28,Ravi J. Matthai Centre for Educational Innovation,RJMCEI,office,old,23.032443,72.536228,1.83
-29,Kasturbhai Lalbhai Management Development Center,KLMDC,facility,old,23.030851,72.538375,4.76
+0,Dorm 7,D7,dorm,old,23.031276,72.536721,0.0
+1,Dormitory 10,D10,dorm,new,23.032601,72.530549,13.03
+2,Dormitory 11,D11,dorm,new,23.032527,72.530718,12.72
+3,Dormitory 12,D12,dorm,new,23.032287,72.530657,12.83
+4,Dormitory 13,D13,dorm,new,23.032036,72.530601,12.97
+5,Dormitory 14,D14,dorm,new,23.032455,72.530884,12.43
+6,Dormitory 15,D15,dorm,new,23.032205,72.530825,12.54
+7,Dormitory 16,D16,dorm,new,23.031957,72.530764,12.71
+8,Dormitory 17,D17,dorm,new,23.032385,72.531044,12.14
+9,Dormitory 18,D18,dorm,new,23.03213,72.530985,12.27
+10,Dormitory 19,D19,dorm,new,23.03188,72.530929,12.44
+11,Dormitory 20,D20,dorm,new,23.032297,72.531212,11.85
+12,Dorm 24,D24,dorm,new,23.031464,72.532245,10.56
+13,Dorm 28,D28,dorm,new,23.031987,72.532017,10.51
+14,Dorm 29,D29,dorm,new,23.032027,72.531709,11.03
+15,Dorm 30,D30,dorm,new,23.032054,72.531433,11.5
+16,Dorm 31,D31,dorm,new,23.03177,72.531398,11.68
+17,Dorm 32,D32,dorm,new,23.031532,72.531372,11.88
+18,Dorm 33,D33,dorm,new,23.031478,72.531688,11.41
+19,Dorm 34,D34,dorm,new,23.031461,72.531954,11.0
+20,Dorm 35,D35,dorm,new,23.031742,72.531998,10.7
+21,Estate Office,Estate Off,office,old,23.031577,72.53581,1.72
+22,Student Activity Block,SAB,facility,new,23.031766,72.531686,11.2
+23,IMDC Dining Hall,Dining,facility,new,23.033454,72.531731,11.46
+24,International Management Development Center,IMDC,facility,new,23.034127,72.531878,12.04
+25,Center for Innovation Incubation & Entrepreneurship,CIIE,office,new,23.034642,72.532646,12.08
+26,Administrative Block,Admin,office,old,23.032756,72.536122,3.04
+27,Computer Center,Comp Ctr,office,old,23.032701,72.53579,3.2
+28,Faculty Wings,Faculty,office,old,23.032128,72.535906,2.19
+29,Vikram Sarabhai Library,Library,office,old,23.031632,72.536351,0.95
+30,Ravi J. Matthai Centre for Educational Innovation,RJMCEI,office,old,23.032443,72.536228,2.41
+31,Kasturbhai Lalbhai Management Development Center,KLMDC,facility,old,23.030851,72.538375,3.05

@@ -39,9 +39,11 @@ def simulate(method, campus, days=30, per_trade=3, crew_mix=None,
         team = []
         for trade, n in crew_mix.items():
             for k in range(n):
-                team.append({"name": f"{trade[:4]}-{k+1}", "trade": trade})
+                team.append({"name": f"{trade[:4]}-{k+1}", "trade": trade,
+                             "home": campus["depot"][trade]})
     else:
-        team = inst.crew(per_trade)
+        team = inst.crew(campus, per_trade)
+    home_of = dispatch.homes(team)
 
     solver = dispatch.METHODS[method]
     rng = random.Random(seed)
@@ -58,10 +60,10 @@ def simulate(method, campus, days=30, per_trade=3, crew_mix=None,
 
         plan, deferred = solver(queue, team, walk, day, alpha)
 
-        travel = dispatch.plan_travel(plan, walk, day)
+        travel = dispatch.plan_travel(plan, walk, day, home_of)
         done_today = 0
-        for route in plan.values():
-            ok, _, finish = dispatch.run_route(route, walk, day)
+        for name, route in plan.items():
+            ok, _, finish = dispatch.run_route(route, walk, day, home_of[name])
             if not ok:
                 raise RuntimeError(f"{method} produced an infeasible route")
             for tk in route:
@@ -154,7 +156,8 @@ def one_day_plans(campus, day=0, per_trade=3, seed=2026,
     figures and the worked example in the report.
     """
     walk = campus["walk"]
-    team = inst.crew(per_trade)
+    team = inst.crew(campus, per_trade)
+    home_of = dispatch.homes(team)
     rng = random.Random(seed)
 
     # Draw days until we get one with a typical number of complaints. The
@@ -172,8 +175,9 @@ def one_day_plans(campus, day=0, per_trade=3, seed=2026,
         out[name] = {
             "plan": plan,
             "deferred": deferred,
-            "cost": round(dispatch.plan_cost(plan, deferred, walk, day), 2),
-            "travel": round(dispatch.plan_travel(plan, walk, day), 1),
+            "cost": round(dispatch.plan_cost(plan, deferred, walk, day,
+                                             home_of), 2),
+            "travel": round(dispatch.plan_travel(plan, walk, day, home_of), 1),
             "done": sum(len(r) for r in plan.values()),
         }
     return tickets, team, out

@@ -14,15 +14,16 @@ Office's real figures can swap them in and rerun the study.
 ## The result in one paragraph
 
 The Estate Office currently works its queue roughly in the order complaints
-arrive. Over 30 simulated days that wastes about a third of the crew's
-walking and closes only 41% of urgent complaints within the promised four
-hours. Planning the day properly — Clarke and Wright's savings heuristic to
-build the routes, then 2-opt and Or-opt to improve them — cuts walking from
-28.4 to 19.4 minutes per technician per day and raises urgent compliance to
-86%, with no extra staff. Of the urgent complaints still closed late, all but
-one were impossible for anyone to close on time: the room can only be opened
-in the afternoon and the repair runs past the deadline. That remaining failure
-is a problem with the promise, not with the plan.
+arrive. Over 30 simulated days that wastes 41% of the crew's walking and
+closes only 37% of urgent complaints within the promised four hours. Planning
+the day properly — Clarke and Wright's savings heuristic to build the routes,
+then 2-opt and Or-opt to improve them — cuts walking from 26.8 to 15.7
+minutes per technician per day and raises urgent compliance to 87%, with no
+extra staff and no new equipment. Every urgent complaint still closed late was
+impossible for anyone to close on time: the room can only be opened in the
+afternoon and the repair runs past the deadline. The scheduling has run out of
+room to improve, and what is left is a problem with the promise, not with the
+plan.
 
 ## Running it
 
@@ -78,7 +79,7 @@ sum over jobs of (priority weight x hours late)  +  0.05 x walking minutes
 
 subject to: each job done once, by a technician of the matching trade; nobody
 starts a job before its access window opens or after it shuts; everyone back
-at the depot by the end of the shift. Jobs that do not fit stay in the queue
+at their own trade's store room by the end of the shift. Jobs that do not fit stay in the queue
 and reappear the next day, so falling behind compounds.
 
 Urgent complaints carry a weight of 10 and are promised four hours, normal
@@ -88,12 +89,28 @@ not drive the answer.
 
 ### Why the campus matters
 
-A main road splits the campus and there is no crossing at road level. The
-Estate Office is on the old campus; 19 of the 29 complaint sites are dorms on
-the new campus. Walking times are built so that the only way across is the
-walkway tunnel, which makes a cross-campus trip about 11 minutes against 2
-minutes for one that stays on one side. Every technician starts the day on the
-wrong side of the road, which is exactly what makes bundling worth doing.
+A main road splits the campus and there is no crossing at road level. Walking
+times are built so that the only way across is the walkway tunnel, which makes
+a cross-campus trip about 11 minutes against 2 minutes for one that stays on
+one side.
+
+The crews are not in one place, which is what gives the problem its shape. The
+electricians work out of a store room in Dorm 7 on the main campus; the
+plumbers and carpenters share one in Dorm 24 on the new campus. The two
+buildings are 460 m apart in a straight line and a 10.6 minute walk apart in
+practice. So each trade has its own far side of the campus, the same job is
+cheap for one trade and expensive for another, and the two trades should be
+batching their cross-tunnel work in opposite directions.
+
+OpenStreetMap does not name those two dormitories individually, so they were
+placed from the official IIMA campus map, which groups the dorms as D1–D18 on
+the main campus and D19–D27, D28–D35 and D36–D43 on the new one. Each sits on
+the footprint of a real building in the right group. One caution when reading
+`out/results/locations.csv`: OSM labels several new-campus blocks "Dormitory
+10" to "Dormitory 20", which clashes with the official numbering, where
+D10–D18 are main-campus buildings. The OSM names were kept because they are
+what the map data says, but the numbers on those blocks are not official dorm
+numbers.
 
 ### The four methods
 

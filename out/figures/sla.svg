@@ -18,23 +18,23 @@
 <text x="52.92" y="70.69" text-anchor="end" font-size="7.6" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
 <text x="56.7" y="53.81" text-anchor="start" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">closed on time (%)</text>
 <text x="287.28" y="248.48" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">priority</text>
-<rect x="82.08" y="157.1" width="22.95" height="62.14" fill="#1F4E79" opacity="1.0"/>
-<text x="93.42" y="153.30" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">41</text>
-<rect x="109.08" y="134.27" width="22.95" height="84.97" fill="#C62828" opacity="1.0"/>
-<text x="120.42" y="130.47" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">56</text>
-<rect x="136.08" y="92.69" width="22.95" height="126.55" fill="#2E7D32" opacity="1.0"/>
-<text x="147.42" y="88.89" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">84</text>
-<rect x="163.08" y="89.96" width="22.95" height="129.28" fill="#B26500" opacity="1.0"/>
-<text x="174.42" y="86.17" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">86</text>
+<rect x="82.08" y="163.3" width="22.95" height="55.94" fill="#1F4E79" opacity="1.0"/>
+<text x="93.42" y="159.50" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">37</text>
+<rect x="109.08" y="135.32" width="22.95" height="83.92" fill="#C62828" opacity="1.0"/>
+<text x="120.42" y="131.53" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">56</text>
+<rect x="136.08" y="89.66" width="22.95" height="129.58" fill="#2E7D32" opacity="1.0"/>
+<text x="147.42" y="85.86" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">86</text>
+<rect x="163.08" y="87.85" width="22.95" height="131.39" fill="#B26500" opacity="1.0"/>
+<text x="174.42" y="84.05" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">87</text>
 <text x="136.08" y="233.36" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">urgent</text>
-<rect x="233.28" y="86.18" width="22.95" height="133.06" fill="#1F4E79" opacity="1.0"/>
-<text x="244.62" y="82.39" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">88</text>
-<rect x="260.28" y="74.24" width="22.95" height="145.00" fill="#C62828" opacity="1.0"/>
-<text x="271.62" y="70.44" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">96</text>
-<rect x="287.28" y="68.19" width="22.95" height="151.05" fill="#2E7D32" opacity="1.0"/>
-<text x="298.62" y="64.39" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
-<rect x="314.28" y="68.49" width="22.95" height="150.75" fill="#B26500" opacity="1.0"/>
-<text x="325.62" y="64.70" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
+<rect x="233.28" y="83.16" width="22.95" height="136.08" fill="#1F4E79" opacity="1.0"/>
+<text x="244.62" y="79.36" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">90</text>
+<rect x="260.28" y="75.45" width="22.95" height="143.79" fill="#C62828" opacity="1.0"/>
+<text x="271.62" y="71.65" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">95</text>
+<rect x="287.28" y="68.04" width="22.95" height="151.20" fill="#2E7D32" opacity="1.0"/>
+<text x="298.62" y="64.24" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
+<rect x="314.28" y="68.19" width="22.95" height="151.05" fill="#B26500" opacity="1.0"/>
+<text x="325.62" y="64.39" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
 <text x="287.28" y="233.36" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">normal</text>
 <rect x="384.48" y="68.04" width="22.95" height="151.20" fill="#1F4E79" opacity="1.0"/>
 <text x="395.82" y="64.24" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
@@ -42,8 +42,8 @@
 <text x="422.82" y="65.15" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">99</text>
 <rect x="438.48" y="68.04" width="22.95" height="151.20" fill="#2E7D32" opacity="1.0"/>
 <text x="449.82" y="64.24" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
-<rect x="465.48" y="68.34" width="22.95" height="150.90" fill="#B26500" opacity="1.0"/>
-<text x="476.82" y="64.54" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
+<rect x="465.48" y="68.04" width="22.95" height="151.20" fill="#B26500" opacity="1.0"/>
+<text x="476.82" y="64.24" text-anchor="middle" font-size="6.4" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">100</text>
 <text x="438.48" y="233.36" text-anchor="middle" font-size="7.9" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">minor</text>
 <rect x="60.48" y="11.72" width="9.07" height="9.07" fill="#1F4E79" opacity="1.0"/>
 <text x="72.58" y="18.76" text-anchor="start" font-size="7.2" font-family="Inter, Helvetica, Arial, sans-serif" fill="#6B7280">fifo</text>

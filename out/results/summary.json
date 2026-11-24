@@ -1,235 +1,248 @@
 {
  "campus": {
-  "locations": 30,
-  "complaint_sites": 29,
-  "dorms": 19,
-  "new_campus": 23,
-  "old_campus": 7,
+  "locations": 32,
+  "complaint_sites": 31,
+  "dorms": 21,
+  "new_campus": 24,
+  "old_campus": 8,
   "tunnel_m": 94.3,
-  "mean_walk": 5.5,
+  "mean_walk": 5.7,
   "mean_same_campus": 2.1,
   "mean_cross_campus": 11.3,
   "max_walk": 16.1,
-  "depot_zone": "old"
+  "depots": {
+   "electrical": {
+    "name": "Dorm 7",
+    "zone": "old"
+   },
+   "plumbing": {
+    "name": "Dorm 24",
+    "zone": "new"
+   },
+   "carpentry": {
+    "name": "Dorm 24",
+    "zone": "new"
+   }
+  }
  },
  "methods": {
   "fifo": {
    "method": "fifo",
    "days": 30,
    "crew": 9,
-   "completed": 1743,
-   "unfinished_at_end": 2,
-   "weighted_tardiness": 4366.3,
-   "travel_min": 7675.6,
-   "travel_per_tech_day": 28.4,
-   "sla_met_pct": 84.1,
-   "objective": 4750.1,
+   "completed": 1657,
+   "unfinished_at_end": 8,
+   "weighted_tardiness": 3241.0,
+   "travel_min": 7230.9,
+   "travel_per_tech_day": 26.8,
+   "sla_met_pct": 85.1,
+   "objective": 3602.6,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 41.1,
-     "mean_wait_h": 4.45,
-     "p90_wait_h": 8.08,
-     "max_wait_h": 13.87
+     "n": 243,
+     "sla_met_pct": 37.0,
+     "mean_wait_h": 4.47,
+     "p90_wait_h": 7.26,
+     "max_wait_h": 9.51
     },
     "2": {
-     "n": 930,
-     "sla_met_pct": 88.0,
-     "mean_wait_h": 4.44,
-     "p90_wait_h": 8.03,
-     "max_wait_h": 16.47
+     "n": 938,
+     "sla_met_pct": 90.0,
+     "mean_wait_h": 4.53,
+     "p90_wait_h": 7.45,
+     "max_wait_h": 13.94
     },
     "3": {
-     "n": 531,
+     "n": 476,
      "sla_met_pct": 100.0,
-     "mean_wait_h": 4.34,
-     "p90_wait_h": 8.01,
-     "max_wait_h": 14.39
+     "mean_wait_h": 4.53,
+     "p90_wait_h": 7.99,
+     "max_wait_h": 13.09
     }
    },
-   "final_backlog": 2,
-   "mean_backlog": 7.0,
-   "urgent_total": 282,
-   "urgent_late": 166,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 126
+   "final_backlog": 8,
+   "mean_backlog": 6.1,
+   "urgent_total": 243,
+   "urgent_late": 153,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 121
   },
   "savings": {
    "method": "savings",
    "days": 30,
    "crew": 9,
-   "completed": 1733,
-   "unfinished_at_end": 12,
-   "weighted_tardiness": 2688.5,
-   "travel_min": 5153.6,
-   "travel_per_tech_day": 19.1,
+   "completed": 1665,
+   "unfinished_at_end": 0,
+   "weighted_tardiness": 2563.8,
+   "travel_min": 4048.5,
+   "travel_per_tech_day": 15.0,
    "sla_met_pct": 90.5,
-   "objective": 2946.2,
+   "objective": 2766.2,
    "by_priority": {
     "1": {
-     "n": 281,
-     "sla_met_pct": 56.2,
-     "mean_wait_h": 3.49,
-     "p90_wait_h": 5.97,
-     "max_wait_h": 12.93
+     "n": 245,
+     "sla_met_pct": 55.5,
+     "mean_wait_h": 3.47,
+     "p90_wait_h": 6.33,
+     "max_wait_h": 12.03
     },
     "2": {
-     "n": 927,
-     "sla_met_pct": 95.9,
-     "mean_wait_h": 3.76,
-     "p90_wait_h": 6.32,
-     "max_wait_h": 29.63
+     "n": 942,
+     "sla_met_pct": 95.1,
+     "mean_wait_h": 4.02,
+     "p90_wait_h": 6.85,
+     "max_wait_h": 26.7
     },
     "3": {
-     "n": 525,
+     "n": 478,
      "sla_met_pct": 99.4,
-     "mean_wait_h": 3.85,
-     "p90_wait_h": 6.8,
-     "max_wait_h": 27.83
+     "mean_wait_h": 3.96,
+     "p90_wait_h": 6.6,
+     "max_wait_h": 27.07
     }
    },
-   "final_backlog": 12,
-   "mean_backlog": 3.5,
-   "urgent_total": 281,
-   "urgent_late": 123,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 83
+   "final_backlog": 0,
+   "mean_backlog": 3.3,
+   "urgent_total": 245,
+   "urgent_late": 109,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 77
   },
   "priority": {
    "method": "priority",
    "days": 30,
    "crew": 9,
-   "completed": 1745,
+   "completed": 1665,
    "unfinished_at_end": 0,
-   "weighted_tardiness": 251.9,
-   "travel_min": 5543.7,
-   "travel_per_tech_day": 20.5,
-   "sla_met_pct": 97.3,
-   "objective": 529.0,
+   "weighted_tardiness": 106.5,
+   "travel_min": 5029.2,
+   "travel_per_tech_day": 18.6,
+   "sla_met_pct": 97.9,
+   "objective": 358.0,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 83.7,
-     "mean_wait_h": 2.85,
-     "p90_wait_h": 4.08,
-     "max_wait_h": 12.88
+     "n": 245,
+     "sla_met_pct": 85.7,
+     "mean_wait_h": 2.92,
+     "p90_wait_h": 4.07,
+     "max_wait_h": 5.58
     },
     "2": {
-     "n": 932,
-     "sla_met_pct": 99.9,
-     "mean_wait_h": 3.79,
-     "p90_wait_h": 6.68,
-     "max_wait_h": 8.54
+     "n": 942,
+     "sla_met_pct": 100.0,
+     "mean_wait_h": 3.71,
+     "p90_wait_h": 6.76,
+     "max_wait_h": 7.5
     },
     "3": {
-     "n": 531,
+     "n": 478,
      "sla_met_pct": 100.0,
-     "mean_wait_h": 3.62,
-     "p90_wait_h": 6.57,
-     "max_wait_h": 21.92
+     "mean_wait_h": 3.38,
+     "p90_wait_h": 6.3,
+     "max_wait_h": 13.88
     }
    },
    "final_backlog": 0,
-   "mean_backlog": 0.6,
-   "urgent_total": 282,
-   "urgent_late": 46,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 6
+   "mean_backlog": 0.2,
+   "urgent_total": 245,
+   "urgent_late": 35,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 3
   },
   "savings+improve": {
    "method": "savings+improve",
    "days": 30,
    "crew": 9,
-   "completed": 1744,
-   "unfinished_at_end": 1,
-   "weighted_tardiness": 188.8,
-   "travel_min": 5239.8,
-   "travel_per_tech_day": 19.4,
-   "sla_met_pct": 97.4,
-   "objective": 450.8,
+   "completed": 1665,
+   "unfinished_at_end": 0,
+   "weighted_tardiness": 108.3,
+   "travel_min": 4232.9,
+   "travel_per_tech_day": 15.7,
+   "sla_met_pct": 98.0,
+   "objective": 319.9,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 85.5,
-     "mean_wait_h": 2.56,
-     "p90_wait_h": 4.08,
-     "max_wait_h": 5.33
+     "n": 245,
+     "sla_met_pct": 86.9,
+     "mean_wait_h": 2.42,
+     "p90_wait_h": 4.05,
+     "max_wait_h": 5.47
     },
     "2": {
-     "n": 932,
-     "sla_met_pct": 99.7,
-     "mean_wait_h": 3.32,
-     "p90_wait_h": 5.87,
-     "max_wait_h": 12.61
+     "n": 942,
+     "sla_met_pct": 99.9,
+     "mean_wait_h": 3.62,
+     "p90_wait_h": 6.29,
+     "max_wait_h": 12.13
     },
     "3": {
-     "n": 530,
-     "sla_met_pct": 99.8,
-     "mean_wait_h": 4.07,
-     "p90_wait_h": 6.87,
-     "max_wait_h": 23.27
+     "n": 478,
+     "sla_met_pct": 100.0,
+     "mean_wait_h": 3.61,
+     "p90_wait_h": 6.39,
+     "max_wait_h": 14.35
     }
    },
-   "final_backlog": 1,
-   "mean_backlog": 1.8,
-   "urgent_total": 282,
-   "urgent_late": 41,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 1
+   "final_backlog": 0,
+   "mean_backlog": 0.6,
+   "urgent_total": 245,
+   "urgent_late": 32,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 0
   }
  },
  "seeds": {
   "fifo": {
    "values": [
-    4750.1,
-    4180.1,
-    4067.6,
-    3874.7,
-    4075.7
+    3602.6,
+    3562.4,
+    4825.5,
+    4125.0,
+    3714.9
    ],
-   "mean": 4189.6,
-   "min": 3874.7,
-   "max": 4750.1
+   "mean": 3966.1,
+   "min": 3562.4,
+   "max": 4825.5
   },
   "savings": {
    "values": [
-    2946.2,
-    3569.6,
-    3881.1,
-    3119.1,
-    3340.6
+    2766.2,
+    2192.4,
+    3810.8,
+    2820.7,
+    2534.7
    ],
-   "mean": 3371.3,
-   "min": 2946.2,
-   "max": 3881.1
+   "mean": 2825.0,
+   "min": 2192.4,
+   "max": 3810.8
   },
   "priority": {
    "values": [
-    529.0,
-    446.8,
-    385.8,
-    382.3,
-    406.3
+    358.0,
+    379.7,
+    341.7,
+    403.5,
+    373.2
    ],
-   "mean": 430.0,
-   "min": 382.3,
-   "max": 529.0
+   "mean": 371.2,
+   "min": 341.7,
+   "max": 403.5
   },
   "savings+improve": {
    "values": [
-    450.8,
-    405.3,
-    437.5,
-    329.7,
-    359.3
+    319.9,
+    302.6,
+    277.9,
+    348.5,
+    313.2
    ],
-   "mean": 396.5,
-   "min": 329.7,
-   "max": 450.8
+   "mean": 312.4,
+   "min": 277.9,
+   "max": 348.5
   }
  },
  "crew": {
@@ -237,169 +250,169 @@
    "method": "savings+improve",
    "days": 30,
    "crew": 6,
-   "completed": 1716,
-   "unfinished_at_end": 29,
-   "weighted_tardiness": 6349.9,
-   "travel_min": 4881.1,
-   "travel_per_tech_day": 27.1,
-   "sla_met_pct": 82.2,
-   "objective": 6594.0,
+   "completed": 1656,
+   "unfinished_at_end": 9,
+   "weighted_tardiness": 2512.4,
+   "travel_min": 4104.1,
+   "travel_per_tech_day": 22.8,
+   "sla_met_pct": 90.3,
+   "objective": 2717.6,
    "by_priority": {
     "1": {
-     "n": 281,
-     "sla_met_pct": 76.2,
-     "mean_wait_h": 3.19,
-     "p90_wait_h": 4.68,
-     "max_wait_h": 23.81
+     "n": 245,
+     "sla_met_pct": 79.6,
+     "mean_wait_h": 2.85,
+     "p90_wait_h": 4.32,
+     "max_wait_h": 11.63
     },
     "2": {
-     "n": 919,
-     "sla_met_pct": 83.1,
-     "mean_wait_h": 5.45,
-     "p90_wait_h": 10.27,
-     "max_wait_h": 35.82
+     "n": 940,
+     "sla_met_pct": 90.0,
+     "mean_wait_h": 4.81,
+     "p90_wait_h": 7.49,
+     "max_wait_h": 23.69
     },
     "3": {
-     "n": 516,
-     "sla_met_pct": 83.9,
-     "mean_wait_h": 11.27,
-     "p90_wait_h": 30.95,
-     "max_wait_h": 82.32
+     "n": 471,
+     "sla_met_pct": 96.6,
+     "mean_wait_h": 7.1,
+     "p90_wait_h": 16.58,
+     "max_wait_h": 59.24
     }
    },
-   "final_backlog": 29,
-   "mean_backlog": 29.3,
-   "urgent_total": 281,
-   "urgent_late": 67,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 27
+   "final_backlog": 9,
+   "mean_backlog": 11.5,
+   "urgent_total": 245,
+   "urgent_late": 50,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 18
   },
   "3 of each trade (9)": {
    "method": "savings+improve",
    "days": 30,
    "crew": 9,
-   "completed": 1744,
-   "unfinished_at_end": 1,
-   "weighted_tardiness": 188.8,
-   "travel_min": 5239.8,
-   "travel_per_tech_day": 19.4,
-   "sla_met_pct": 97.4,
-   "objective": 450.8,
+   "completed": 1665,
+   "unfinished_at_end": 0,
+   "weighted_tardiness": 108.3,
+   "travel_min": 4232.9,
+   "travel_per_tech_day": 15.7,
+   "sla_met_pct": 98.0,
+   "objective": 319.9,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 85.5,
-     "mean_wait_h": 2.56,
-     "p90_wait_h": 4.08,
-     "max_wait_h": 5.33
+     "n": 245,
+     "sla_met_pct": 86.9,
+     "mean_wait_h": 2.42,
+     "p90_wait_h": 4.05,
+     "max_wait_h": 5.47
     },
     "2": {
-     "n": 932,
-     "sla_met_pct": 99.7,
-     "mean_wait_h": 3.32,
-     "p90_wait_h": 5.87,
-     "max_wait_h": 12.61
+     "n": 942,
+     "sla_met_pct": 99.9,
+     "mean_wait_h": 3.62,
+     "p90_wait_h": 6.29,
+     "max_wait_h": 12.13
     },
     "3": {
-     "n": 530,
-     "sla_met_pct": 99.8,
-     "mean_wait_h": 4.07,
-     "p90_wait_h": 6.87,
-     "max_wait_h": 23.27
+     "n": 478,
+     "sla_met_pct": 100.0,
+     "mean_wait_h": 3.61,
+     "p90_wait_h": 6.39,
+     "max_wait_h": 14.35
     }
    },
-   "final_backlog": 1,
-   "mean_backlog": 1.8,
-   "urgent_total": 282,
-   "urgent_late": 41,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 1
+   "final_backlog": 0,
+   "mean_backlog": 0.6,
+   "urgent_total": 245,
+   "urgent_late": 32,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 0
   },
   "4 of each trade (12)": {
    "method": "savings+improve",
    "days": 30,
    "crew": 12,
-   "completed": 1745,
+   "completed": 1665,
    "unfinished_at_end": 0,
-   "weighted_tardiness": 153.4,
-   "travel_min": 5442.9,
-   "travel_per_tech_day": 15.1,
-   "sla_met_pct": 97.6,
-   "objective": 425.5,
+   "weighted_tardiness": 81.5,
+   "travel_min": 4233.0,
+   "travel_per_tech_day": 11.8,
+   "sla_met_pct": 98.1,
+   "objective": 293.1,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 85.5,
-     "mean_wait_h": 2.53,
-     "p90_wait_h": 4.08,
-     "max_wait_h": 5.33
+     "n": 245,
+     "sla_met_pct": 86.9,
+     "mean_wait_h": 2.44,
+     "p90_wait_h": 4.05,
+     "max_wait_h": 4.98
     },
     "2": {
-     "n": 932,
-     "sla_met_pct": 99.9,
-     "mean_wait_h": 3.26,
-     "p90_wait_h": 5.81,
-     "max_wait_h": 8.9
+     "n": 942,
+     "sla_met_pct": 100.0,
+     "mean_wait_h": 3.56,
+     "p90_wait_h": 6.28,
+     "max_wait_h": 7.45
     },
     "3": {
-     "n": 531,
+     "n": 478,
      "sla_met_pct": 100.0,
-     "mean_wait_h": 3.38,
-     "p90_wait_h": 6.27,
-     "max_wait_h": 14.01
+     "mean_wait_h": 3.35,
+     "p90_wait_h": 6.06,
+     "max_wait_h": 13.43
     }
    },
    "final_backlog": 0,
-   "mean_backlog": 0.2,
-   "urgent_total": 282,
-   "urgent_late": 41,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 1
+   "mean_backlog": 0.1,
+   "urgent_total": 245,
+   "urgent_late": 32,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 0
   },
   "4 electrical / 4 plumbing / 1 carpentry (9)": {
    "method": "savings+improve",
    "days": 30,
    "crew": 9,
-   "completed": 1740,
-   "unfinished_at_end": 5,
-   "weighted_tardiness": 3271.9,
-   "travel_min": 5193.8,
-   "travel_per_tech_day": 19.2,
-   "sla_met_pct": 91.4,
-   "objective": 3531.6,
+   "completed": 1657,
+   "unfinished_at_end": 8,
+   "weighted_tardiness": 2145.4,
+   "travel_min": 4206.7,
+   "travel_per_tech_day": 15.6,
+   "sla_met_pct": 93.4,
+   "objective": 2355.7,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 81.6,
-     "mean_wait_h": 2.84,
-     "p90_wait_h": 4.27,
-     "max_wait_h": 11.62
+     "n": 245,
+     "sla_met_pct": 85.3,
+     "mean_wait_h": 2.74,
+     "p90_wait_h": 4.13,
+     "max_wait_h": 16.94
     },
     "2": {
-     "n": 931,
-     "sla_met_pct": 92.3,
-     "mean_wait_h": 4.38,
-     "p90_wait_h": 7.07,
-     "max_wait_h": 35.98
+     "n": 941,
+     "sla_met_pct": 93.2,
+     "mean_wait_h": 4.39,
+     "p90_wait_h": 7.09,
+     "max_wait_h": 31.12
     },
     "3": {
-     "n": 527,
-     "sla_met_pct": 95.3,
-     "mean_wait_h": 5.88,
-     "p90_wait_h": 12.22,
-     "max_wait_h": 73.77
+     "n": 471,
+     "sla_met_pct": 98.1,
+     "mean_wait_h": 4.72,
+     "p90_wait_h": 7.34,
+     "max_wait_h": 36.42
     }
    },
-   "final_backlog": 5,
-   "mean_backlog": 10.4,
-   "urgent_total": 282,
-   "urgent_late": 52,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 12
+   "final_backlog": 8,
+   "mean_backlog": 6.8,
+   "urgent_total": 245,
+   "urgent_late": 36,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 4
   }
  },
  "surge": {
@@ -407,169 +420,169 @@
    "method": "fifo",
    "days": 30,
    "crew": 9,
-   "completed": 1743,
-   "unfinished_at_end": 2,
-   "weighted_tardiness": 4366.3,
-   "travel_min": 7675.6,
-   "travel_per_tech_day": 28.4,
-   "sla_met_pct": 84.1,
-   "objective": 4750.1,
+   "completed": 1657,
+   "unfinished_at_end": 8,
+   "weighted_tardiness": 3241.0,
+   "travel_min": 7230.9,
+   "travel_per_tech_day": 26.8,
+   "sla_met_pct": 85.1,
+   "objective": 3602.6,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 41.1,
-     "mean_wait_h": 4.45,
-     "p90_wait_h": 8.08,
-     "max_wait_h": 13.87
+     "n": 243,
+     "sla_met_pct": 37.0,
+     "mean_wait_h": 4.47,
+     "p90_wait_h": 7.26,
+     "max_wait_h": 9.51
     },
     "2": {
-     "n": 930,
-     "sla_met_pct": 88.0,
-     "mean_wait_h": 4.44,
-     "p90_wait_h": 8.03,
-     "max_wait_h": 16.47
+     "n": 938,
+     "sla_met_pct": 90.0,
+     "mean_wait_h": 4.53,
+     "p90_wait_h": 7.45,
+     "max_wait_h": 13.94
     },
     "3": {
-     "n": 531,
+     "n": 476,
      "sla_met_pct": 100.0,
-     "mean_wait_h": 4.34,
-     "p90_wait_h": 8.01,
-     "max_wait_h": 14.39
+     "mean_wait_h": 4.53,
+     "p90_wait_h": 7.99,
+     "max_wait_h": 13.09
     }
    },
-   "final_backlog": 2,
-   "mean_backlog": 7.0,
-   "urgent_total": 282,
-   "urgent_late": 166,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 126
+   "final_backlog": 8,
+   "mean_backlog": 6.1,
+   "urgent_total": 243,
+   "urgent_late": 153,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 121
   },
   "58-savings+improve": {
    "method": "savings+improve",
    "days": 30,
    "crew": 9,
-   "completed": 1744,
-   "unfinished_at_end": 1,
-   "weighted_tardiness": 188.8,
-   "travel_min": 5239.8,
-   "travel_per_tech_day": 19.4,
-   "sla_met_pct": 97.4,
-   "objective": 450.8,
+   "completed": 1665,
+   "unfinished_at_end": 0,
+   "weighted_tardiness": 108.3,
+   "travel_min": 4232.9,
+   "travel_per_tech_day": 15.7,
+   "sla_met_pct": 98.0,
+   "objective": 319.9,
    "by_priority": {
     "1": {
-     "n": 282,
-     "sla_met_pct": 85.5,
-     "mean_wait_h": 2.56,
-     "p90_wait_h": 4.08,
-     "max_wait_h": 5.33
+     "n": 245,
+     "sla_met_pct": 86.9,
+     "mean_wait_h": 2.42,
+     "p90_wait_h": 4.05,
+     "max_wait_h": 5.47
     },
     "2": {
-     "n": 932,
-     "sla_met_pct": 99.7,
-     "mean_wait_h": 3.32,
-     "p90_wait_h": 5.87,
-     "max_wait_h": 12.61
+     "n": 942,
+     "sla_met_pct": 99.9,
+     "mean_wait_h": 3.62,
+     "p90_wait_h": 6.29,
+     "max_wait_h": 12.13
     },
     "3": {
-     "n": 530,
-     "sla_met_pct": 99.8,
-     "mean_wait_h": 4.07,
-     "p90_wait_h": 6.87,
-     "max_wait_h": 23.27
+     "n": 478,
+     "sla_met_pct": 100.0,
+     "mean_wait_h": 3.61,
+     "p90_wait_h": 6.39,
+     "max_wait_h": 14.35
     }
    },
-   "final_backlog": 1,
-   "mean_backlog": 1.8,
-   "urgent_total": 282,
-   "urgent_late": 41,
-   "urgent_impossible": 40,
-   "urgent_late_but_impossible": 40,
-   "urgent_avoidable_misses": 1
+   "final_backlog": 0,
+   "mean_backlog": 0.6,
+   "urgent_total": 245,
+   "urgent_late": 32,
+   "urgent_impossible": 32,
+   "urgent_late_but_impossible": 32,
+   "urgent_avoidable_misses": 0
   },
   "85-fifo": {
    "method": "fifo",
    "days": 30,
    "crew": 9,
-   "completed": 2339,
-   "unfinished_at_end": 155,
-   "weighted_tardiness": 56127.5,
-   "travel_min": 9397.5,
-   "travel_per_tech_day": 34.8,
-   "sla_met_pct": 59.2,
-   "objective": 56597.4,
+   "completed": 2395,
+   "unfinished_at_end": 208,
+   "weighted_tardiness": 71658.5,
+   "travel_min": 9617.5,
+   "travel_per_tech_day": 35.6,
+   "sla_met_pct": 53.9,
+   "objective": 72139.3,
    "by_priority": {
     "1": {
-     "n": 330,
-     "sla_met_pct": 19.4,
-     "mean_wait_h": 11.28,
-     "p90_wait_h": 31.27,
-     "max_wait_h": 43.46
+     "n": 350,
+     "sla_met_pct": 18.6,
+     "mean_wait_h": 12.2,
+     "p90_wait_h": 36.32,
+     "max_wait_h": 43.5
     },
     "2": {
-     "n": 1313,
-     "sla_met_pct": 56.0,
-     "mean_wait_h": 11.63,
-     "p90_wait_h": 30.95,
-     "max_wait_h": 44.18
+     "n": 1357,
+     "sla_met_pct": 48.9,
+     "mean_wait_h": 13.5,
+     "p90_wait_h": 37.09,
+     "max_wait_h": 45.84
     },
     "3": {
-     "n": 696,
-     "sla_met_pct": 84.2,
-     "mean_wait_h": 10.43,
-     "p90_wait_h": 29.65,
-     "max_wait_h": 44.08
+     "n": 688,
+     "sla_met_pct": 81.7,
+     "mean_wait_h": 12.49,
+     "p90_wait_h": 36.84,
+     "max_wait_h": 45.81
     }
    },
-   "final_backlog": 155,
-   "mean_backlog": 90.0,
-   "urgent_total": 330,
-   "urgent_late": 266,
-   "urgent_impossible": 30,
-   "urgent_late_but_impossible": 30,
-   "urgent_avoidable_misses": 236
+   "final_backlog": 208,
+   "mean_backlog": 113.5,
+   "urgent_total": 350,
+   "urgent_late": 285,
+   "urgent_impossible": 34,
+   "urgent_late_but_impossible": 34,
+   "urgent_avoidable_misses": 251
   },
   "85-savings+improve": {
    "method": "savings+improve",
    "days": 30,
    "crew": 9,
-   "completed": 2463,
-   "unfinished_at_end": 31,
-   "weighted_tardiness": 6284.5,
-   "travel_min": 6601.4,
-   "travel_per_tech_day": 24.4,
-   "sla_met_pct": 87.8,
-   "objective": 6614.5,
+   "completed": 2579,
+   "unfinished_at_end": 24,
+   "weighted_tardiness": 6241.2,
+   "travel_min": 5695.6,
+   "travel_per_tech_day": 21.1,
+   "sla_met_pct": 88.1,
+   "objective": 6526.0,
    "by_priority": {
     "1": {
-     "n": 355,
-     "sla_met_pct": 84.2,
-     "mean_wait_h": 2.92,
-     "p90_wait_h": 4.28,
-     "max_wait_h": 16.03
+     "n": 385,
+     "sla_met_pct": 83.9,
+     "mean_wait_h": 2.86,
+     "p90_wait_h": 4.2,
+     "max_wait_h": 12.37
     },
     "2": {
-     "n": 1392,
-     "sla_met_pct": 85.9,
-     "mean_wait_h": 5.2,
-     "p90_wait_h": 8.81,
-     "max_wait_h": 33.44
+     "n": 1454,
+     "sla_met_pct": 86.2,
+     "mean_wait_h": 5.23,
+     "p90_wait_h": 8.97,
+     "max_wait_h": 39.84
     },
     "3": {
-     "n": 716,
-     "sla_met_pct": 93.3,
-     "mean_wait_h": 8.39,
-     "p90_wait_h": 20.13,
-     "max_wait_h": 79.77
+     "n": 740,
+     "sla_met_pct": 93.9,
+     "mean_wait_h": 7.55,
+     "p90_wait_h": 18.19,
+     "max_wait_h": 77.72
     }
    },
-   "final_backlog": 31,
-   "mean_backlog": 26.1,
-   "urgent_total": 355,
-   "urgent_late": 56,
+   "final_backlog": 24,
+   "mean_backlog": 23.8,
+   "urgent_total": 385,
+   "urgent_late": 62,
    "urgent_impossible": 36,
    "urgent_late_but_impossible": 36,
-   "urgent_avoidable_misses": 20
+   "urgent_avoidable_misses": 26
   }
  },
  "sensitivity": [
@@ -577,188 +590,203 @@
    "what": "alpha",
    "value": 0.0,
    "method": "fifo",
-   "objective": 4750.1,
-   "travel": 28.4
+   "objective": 3602.6,
+   "travel": 26.8
   },
   {
    "what": "alpha",
    "value": 0.0,
    "method": "savings+improve",
-   "objective": 482.3,
-   "travel": 22.1
+   "objective": 387.3,
+   "travel": 18.3
   },
   {
    "what": "alpha",
    "value": 0.05,
    "method": "fifo",
-   "objective": 4750.1,
-   "travel": 28.4
+   "objective": 3602.6,
+   "travel": 26.8
   },
   {
    "what": "alpha",
    "value": 0.05,
    "method": "savings+improve",
-   "objective": 450.8,
-   "travel": 19.4
+   "objective": 319.9,
+   "travel": 15.7
   },
   {
    "what": "alpha",
    "value": 0.25,
    "method": "fifo",
-   "objective": 4750.1,
-   "travel": 28.4
+   "objective": 3602.6,
+   "travel": 26.8
   },
   {
    "what": "alpha",
    "value": 0.25,
    "method": "savings+improve",
-   "objective": 450.8,
-   "travel": 19.4
+   "objective": 319.1,
+   "travel": 15.3
   },
   {
    "what": "detour",
    "value": 1.2,
    "method": "fifo",
-   "objective": 4494.4,
-   "travel": 26.9
+   "objective": 3565.5,
+   "travel": 25.1
   },
   {
    "what": "detour",
    "value": 1.2,
    "method": "savings+improve",
-   "objective": 490.4,
-   "travel": 18.1
+   "objective": 318.7,
+   "travel": 14.9
   },
   {
    "what": "detour",
    "value": 1.3,
    "method": "fifo",
-   "objective": 4750.1,
-   "travel": 28.4
+   "objective": 3602.6,
+   "travel": 26.8
   },
   {
    "what": "detour",
    "value": 1.3,
    "method": "savings+improve",
-   "objective": 450.8,
-   "travel": 19.4
+   "objective": 319.9,
+   "travel": 15.7
   },
   {
    "what": "detour",
    "value": 1.4,
    "method": "fifo",
-   "objective": 4743.7,
-   "travel": 30.1
+   "objective": 3684.5,
+   "travel": 28.5
   },
   {
    "what": "detour",
    "value": 1.4,
    "method": "savings+improve",
-   "objective": 500.8,
-   "travel": 20.5
+   "objective": 334.5,
+   "travel": 16.7
   }
  ],
  "exact": [
   {
    "n": 6,
-   "optimum": 1.168,
-   "heuristic": 1.168,
-   "savings": 1.168,
-   "savings_gap": 0.0,
+   "optimum": 1.373,
+   "served": 4,
+   "heuristic": 1.373,
+   "savings": 31.306,
+   "savings_gap": 2180.1,
    "gap": 0.0,
-   "nodes_warm": 321,
-   "nodes_cold": 340,
+   "nodes_warm": 170,
+   "nodes_cold": 176,
+   "nodes_arb_warm": 170,
+   "nodes_arb_cold": 172,
    "seconds": 0.0
   },
   {
    "n": 7,
-   "optimum": 1.18,
-   "heuristic": 1.18,
-   "savings": 1.18,
-   "savings_gap": 0.0,
+   "optimum": 1.373,
+   "served": 4,
+   "heuristic": 1.373,
+   "savings": 31.306,
+   "savings_gap": 2180.1,
    "gap": 0.0,
-   "nodes_warm": 1516,
-   "nodes_cold": 1580,
+   "nodes_warm": 484,
+   "nodes_cold": 490,
+   "nodes_arb_warm": 484,
+   "nodes_arb_cold": 486,
    "seconds": 0.0
   },
   {
    "n": 8,
-   "optimum": 1.223,
-   "heuristic": 1.223,
-   "savings": 19.705,
-   "savings_gap": 1511.2,
+   "optimum": 1.38,
+   "served": 5,
+   "heuristic": 1.38,
+   "savings": 61.306,
+   "savings_gap": 4342.5,
    "gap": 0.0,
-   "nodes_warm": 4051,
-   "nodes_cold": 9702,
-   "seconds": 0.01
+   "nodes_warm": 1489,
+   "nodes_cold": 1550,
+   "nodes_arb_warm": 1489,
+   "nodes_arb_cold": 3059,
+   "seconds": 0.0
   },
   {
    "n": 9,
-   "optimum": 1.243,
-   "heuristic": 1.243,
-   "savings": 1.243,
-   "savings_gap": 0.0,
+   "optimum": 1.38,
+   "served": 6,
+   "heuristic": 1.38,
+   "savings": 31.373,
+   "savings_gap": 2173.4,
    "gap": 0.0,
-   "nodes_warm": 8959,
-   "nodes_cold": 22078,
-   "seconds": 0.03
+   "nodes_warm": 5133,
+   "nodes_cold": 5341,
+   "nodes_arb_warm": 5133,
+   "nodes_arb_cold": 10045,
+   "seconds": 0.01
   },
   {
    "n": 10,
-   "optimum": 1.243,
-   "heuristic": 1.243,
-   "savings": 4.964,
-   "savings_gap": 299.4,
+   "optimum": 1.38,
+   "served": 7,
+   "heuristic": 1.38,
+   "savings": 31.372,
+   "savings_gap": 2173.3,
    "gap": 0.0,
-   "nodes_warm": 48069,
-   "nodes_cold": 125603,
-   "seconds": 0.14
+   "nodes_warm": 10131,
+   "nodes_cold": 10700,
+   "nodes_arb_warm": 10131,
+   "nodes_arb_cold": 22721,
+   "seconds": 0.02
   }
  ],
  "one_day": {
   "fifo": {
-   "cost": 264.22,
-   "travel": 247.3,
-   "done": 54,
-   "deferred": 6
+   "cost": 90.38,
+   "travel": 239.0,
+   "done": 57,
+   "deferred": 1
   },
   "savings": {
-   "cost": 37.97,
-   "travel": 167.6,
-   "done": 60,
-   "deferred": 0
+   "cost": 181.86,
+   "travel": 107.2,
+   "done": 55,
+   "deferred": 3
   },
   "priority": {
-   "cost": 9.05,
-   "travel": 154.4,
-   "done": 60,
+   "cost": 20.77,
+   "travel": 195.3,
+   "done": 58,
    "deferred": 0
   },
   "savings+improve": {
-   "cost": 9.69,
-   "travel": 167.1,
-   "done": 60,
+   "cost": 14.55,
+   "travel": 160.9,
+   "done": 58,
    "deferred": 0
   },
-  "tickets": 60,
+  "tickets": 58,
   "summary": {
-   "n": 60,
+   "n": 58,
    "by_trade": {
     "electrical": 28,
-    "plumbing": 21,
-    "carpentry": 11
+    "plumbing": 22,
+    "carpentry": 8
    },
    "by_priority": {
-    "1": 9,
-    "2": 33,
-    "3": 18
+    "1": 7,
+    "2": 34,
+    "3": 17
    },
    "repair_minutes_by_trade": {
-    "electrical": 620,
-    "plumbing": 828,
-    "carpentry": 337
+    "electrical": 705,
+    "plumbing": 944,
+    "carpentry": 238
    }
   }
  },
- "runtime_seconds": 49.4
+ "runtime_seconds": 43.2
 }

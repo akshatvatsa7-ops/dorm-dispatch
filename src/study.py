@@ -90,7 +90,8 @@ def main():
         "mean_same_campus": round(sum(same) / len(same), 1),
         "mean_cross_campus": round(sum(cross) / len(cross), 1),
         "max_walk": round(max(flat), 1),
-        "depot_zone": c["zone"][0],
+        "depots": {t: {"name": c["names"][i], "zone": c["zone"][i]}
+                   for t, i in c["depot"].items()},
     }
 
     # ---------------------------------------------------------------
@@ -220,28 +221,39 @@ def main():
     # 7. how far off the true optimum are we?
     # ---------------------------------------------------------------
     print("solving small instances exactly by branch and bound ...")
-    bb_rows = [["tickets", "exact optimum", "first come first served",
-                "savings", "priority insertion", "savings + improvement",
-                "gap of savings + improvement (%)", "nodes (warm start)",
-                "nodes (cold start, arbitrary order)", "seconds"]]
+    bb_rows = [["tickets", "exact optimum", "jobs done by the optimum",
+                "first come first served", "savings", "priority insertion",
+                "savings + improvement", "jobs done by savings + improvement",
+                "gap of savings + improvement (%)",
+                "nodes (nearest first, warm start)",
+                "nodes (nearest first, cold start)",
+                "nodes (arbitrary order, warm start)",
+                "nodes (arbitrary order, cold start)", "seconds"]]
     out["exact"] = []
     for n in (6, 7, 8, 9, 10):
         b = exact.benchmark(c, n_jobs=n, seed=BASE_SEED)
         h = {r["method"]: r for r in b["heuristics"]}
-        bb_rows.append([n, b["exact"]["cost"], h["fifo"]["cost"],
+        bb_rows.append([n, b["exact"]["cost"], b["exact"]["served"],
+                        h["fifo"]["cost"],
                         h["savings"]["cost"], h["priority"]["cost"],
                         h["savings+improve"]["cost"],
+                        h["savings+improve"]["served"],
                         h["savings+improve"].get("gap_pct"),
-                        b["exact"]["nodes"], b["exact_naive"]["nodes"],
+                        b["exact"]["nodes"], b["exact_cold"]["nodes"],
+                        b["exact_naive_warm"]["nodes"],
+                        b["exact_naive"]["nodes"],
                         b["exact"]["seconds"]])
         out["exact"].append({
             "n": n, "optimum": b["exact"]["cost"],
+            "served": b["exact"]["served"],
             "heuristic": h["savings+improve"]["cost"],
             "savings": h["savings"]["cost"],
             "savings_gap": h["savings"].get("gap_pct"),
             "gap": h["savings+improve"].get("gap_pct"),
             "nodes_warm": b["exact"]["nodes"],
-            "nodes_cold": b["exact_naive"]["nodes"],
+            "nodes_cold": b["exact_cold"]["nodes"],
+            "nodes_arb_warm": b["exact_naive_warm"]["nodes"],
+            "nodes_arb_cold": b["exact_naive"]["nodes"],
             "seconds": b["exact"]["seconds"]})
     write_csv("branch_and_bound.csv", bb_rows)
 
@@ -362,11 +374,12 @@ def write_tables(out, results, csvs):
                 align="llrrrr")
 
     latex_table("bb",
-                ["Jobs", "Optimum", "Savings alone", "Savings + improve",
-                 "Gap", "Nodes, warm", "Nodes, cold"],
-                [[e["n"], f"{e['optimum']:.3f}", f"{e['savings']:.3f}",
+                ["Jobs", "Done", "Optimum", "Savings", "Sav.+imp.",
+                 "Gap", "Nodes", "Nodes, arb."],
+                [[e["n"], e["served"], f"{e['optimum']:.3f}",
+                  f"{e['savings']:.3f}",
                   f"{e['heuristic']:.3f}", f"{e['gap']:.1f}\\%",
-                  f"{e['nodes_warm']:,}", f"{e['nodes_cold']:,}"]
+                  f"{e['nodes_warm']:,}", f"{e['nodes_arb_cold']:,}"]
                  for e in out["exact"]])
 
     srows = []
@@ -453,6 +466,13 @@ def write_numbers(out, results):
     n["BbMaxTickets"] = max(e["n"] for e in ex)
     n["BbGapWorst"] = max(e["gap"] for e in ex)
     biggest = [e for e in ex if e["n"] == n["BbMaxTickets"]][0]
+    n["BbServed"] = biggest["served"]
+    n["BbNodesArbCold"] = f"{biggest['nodes_arb_cold']:,}"
+    n["BbNodesArbWarm"] = f"{biggest['nodes_arb_warm']:,}"
+    n["BbOrderCutPct"] = round(100 * (biggest["nodes_arb_cold"] - biggest["nodes_cold"])
+                               / biggest["nodes_arb_cold"], 1)
+    n["BbWarmCutPct"] = round(100 * (biggest["nodes_cold"] - biggest["nodes_warm"])
+                              / biggest["nodes_cold"], 1)
     n["BbNodesWarm"] = f"{biggest['nodes_warm']:,}"
     n["BbNodesCold"] = f"{biggest['nodes_cold']:,}"
     n["BbNodeCutPct"] = round(100 * (biggest["nodes_cold"] - biggest["nodes_warm"])

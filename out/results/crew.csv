@@ -1,0 +1,5 @@
+crew,technicians,objective,weighted tardiness (h),closed on time (%),urgent closed on time (%),walking (min/technician/day),mean tickets waiting
+2 of each trade (6),6,6594.0,6349.9,82.2,76.2,27.1,29.3
+3 of each trade (9),9,450.8,188.8,97.4,85.5,19.4,1.8
+4 of each trade (12),12,425.5,153.4,97.6,85.5,15.1,0.2
+4 electrical / 4 plumbing / 1 carpentry (9),9,3531.6,3271.9,91.4,81.6,19.2,10.4

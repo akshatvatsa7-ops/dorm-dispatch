@@ -1,0 +1,5 @@
+complaints per day,method,objective,closed on time (%),urgent closed on time (%),mean tickets waiting,left unfinished
+58,First come first served,4750.1,84.1,41.1,7.0,2
+58,Savings + 2-opt/Or-opt,450.8,97.4,85.5,1.8,1
+85,First come first served,56597.4,59.2,19.4,90.0,155
+85,Savings + 2-opt/Or-opt,6614.5,87.8,84.2,26.1,31

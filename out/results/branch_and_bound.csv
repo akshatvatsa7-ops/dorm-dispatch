@@ -1,0 +1,6 @@
+tickets,exact optimum,first come first served,savings,priority insertion,savings + improvement,gap of savings + improvement (%),nodes (warm start),"nodes (cold start, arbitrary order)",seconds
+6,1.168,1.168,1.168,1.168,1.168,0.0,321,340,0.0
+7,1.18,1.254,1.18,1.181,1.18,0.0,1516,1580,0.0
+8,1.223,18.487,19.705,2.146,1.223,0.0,4051,9702,0.01
+9,1.243,41.567,1.243,2.26,1.243,0.0,8959,22078,0.03
+10,1.243,41.598,4.964,2.311,1.243,0.0,48069,125603,0.14

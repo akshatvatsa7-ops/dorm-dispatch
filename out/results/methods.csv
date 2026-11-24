@@ -1,0 +1,5 @@
+method,objective,weighted tardiness (h),walking (min/technician/day),tickets closed,closed on time (%),urgent closed on time (%),"mean wait, urgent (h)",mean tickets waiting
+First come first served,4750.1,4366.3,28.4,1743,84.1,41.1,4.45,7.0
+Clarke-Wright savings,2946.2,2688.5,19.1,1733,90.5,56.2,3.49,3.5
+Priority insertion,529.0,251.9,20.5,1745,97.3,83.7,2.85,0.6
+Savings + 2-opt/Or-opt,450.8,188.8,19.4,1744,97.4,85.5,2.56,1.8

@@ -9,7 +9,7 @@ geometry is real, taken from OpenStreetMap. The complaints are synthetic, and
 every assumption behind them sits in one file so anybody with the Estate
 Office's real figures can swap them in and rerun the study.
 
-**[Read the report](report/report.pdf)** · **[Project page](docs/index.html)**
+**[Read the report (PDF)](report/report.pdf)** · **[Project page](https://akshatvatsa7-ops.github.io/dorm-dispatch/)** · **[Results workbook](out/dispatch-model.xlsx)**
 
 ## The result in one paragraph
 
